@@ -1,0 +1,1027 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AniScroll</title>
+
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Trebuchet MS', Arial, sans-serif;
+}
+
+html, body {
+
+width: 100%;
+}
+
+body {
+font-size: 20px;
+color: #0C0404;
+transition: background 0.5s ease;
+display: flex;
+flex-direction: column;
+
+min-height: 100vh;
+}
+
+.home-bg {
+background: url('home page.jpeg') no-repeat center center fixed;
+background-size: cover;
+}
+
+.other-bg {
+background: url('anime-bg.jpg') no-repeat center center fixed;
+background-size: cover;
+}
+
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 100;
+display: flex;
+align-items: center;
+padding: 0 48px;
+height: 115px;
+background: rgba(182, 57, 98, 0.75);
+backdrop-filter: blur(18px);
+gap: 40px;
+}
+
+.logo {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+}
+
+.logo img {
+width: 130px;
+border-radius: 100px;
+height: 100px;
+}
+
+.logo:hover img {
+transform: scale(1.05);
+transition: transform 0.3s ease;
+
+}
+
+.logo h1 {
+font-family: Georgia, serif;
+font-size: 60px;
+padding-left: 20px;
+color: #461220;
+margin-right: 40px;
+}
+
+.container {
+margin-top: 115px;
+flex: 1;
+width: 100%;
+padding: 30px;
+background: url("https://i.pinimg.com/736x/2c/9e/f4/2c9ef438a1a5406290bf5c4936d86414.jpg");
+display: flex;
+backdrop-filter: blur(10px);
+flex-direction: column;
+align-items: center;
+}
+
+button {
+padding: 8px 12px;
+margin: 5px;
+border: none;
+border-radius: 8px;
+background: #FF486D;
+color: #FED0DB;
+cursor: pointer;
+font-size: 18px;
+}
+
+button:hover {
+background: #b81e1e;
+}
+
+button.active-tab {
+background: #b81e1e;
+border: 2px solid #FED0DB;
+}
+
+input, select {
+padding: 10px;
+margin: 10px 5px;
+border-radius: 8px;
+border: none;
+}
+
+#genreFilter {
+background: #FF486D;
+color: #FED0DB;
+font-size: 18px;
+padding: 8px 12px;
+border-radius: 8px;
+border: none;
+cursor: pointer;
+}
+
+#genreFilter:hover {
+background: #b81e1e;
+}
+
+#searchSection {
+display: flex;
+gap: 15px;
+margin: 30px auto;
+width: 100%;
+max-width: 800px;
+justify-content: center;
+align-items: center;
+}
+
+#searchSection input {
+padding: 20px 25px;
+font-size: 20px;
+width: 500px;
+border: 2px solid transparent;
+transition: all 0.3s ease;
+background: rgba(255,255,255,0.9);
+}
+
+#searchSection input:hover {
+background: white;
+box-shadow: 0 0 15px rgba(255, 72, 109, 0.5);
+border-color: #FF486D;
+transform: translateY(-2px);
+}
+
+#searchSection input:focus {
+outline: none;
+background: white;
+box-shadow: 0 0 20px rgba(255, 72, 109, 0.7);
+border-color: #FF486D;
+}
+
+#searchSection button {
+padding: 20px 40px;
+font-size: 20px;
+white-space: nowrap;
+}
+
+#results {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+gap: 20px;
+width: 100%;
+max-width: 1200px;
+}
+
+.card {
+background: rgba(61, 47, 47, 0.1);
+padding: 15px;
+border-radius: 10px;
+text-align: center;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 8px;
+}
+
+.card:hover {
+transform: translateY(-5px);
+box-shadow: 0 8px 20px rgba(255, 72, 109, 0.5);
+transition: all 0.3s ease;
+background: rgba(94, 73, 73, 0.2);
+cursor: pointer;
+}
+
+.card img {
+width: 160px;
+height: 220px;
+object-fit: cover;
+border-radius: 10px;
+cursor: pointer;
+}
+
+.card h3 {
+color: #100a0a;
+font-size: 16px;
+margin-top: 5px;
+cursor: pointer;
+}
+
+.card p {
+color: rgb(0, 0, 0);
+font-size: 16px;
+}
+
+.card .genres {
+color: #000000;
+font-size: 13px;
+font-style: italic;
+}
+
+.card select {
+background: #FF486D;
+color: #FED0DB;
+font-size: 14px;
+padding: 6px 10px;
+border-radius: 8px;
+border: none;
+cursor: pointer;
+margin-top: 5px;
+}
+
+.page-heading {
+color: #FF6D6D;
+font-size: 36px;
+margin-bottom: 20px;
+text-align: center;
+}
+
+#listTabs {
+margin-bottom: 20px;
+}
+
+#loader {
+display: none;
+color: white;
+font-size: 22px;
+margin: 30px auto;
+text-align: center;
+}
+
+img {
+border-radius: 10px;
+}
+
+h2 {
+text-align: center;
+font-size: 40px;
+color: #FF6D6D;
+}
+
+p {
+text-align: center;
+font-size: 22px;
+color: rgb(0, 0, 0);
+}
+
+#loginModal {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.7);
+justify-content: center;
+align-items: center;
+z-index: 150;
+}
+
+.modal-box {
+background: white;
+padding: 20px;
+border-radius: 10px;
+width: 300px;
+text-align: center;
+}
+
+.search {
+display: inline;
+margin: 0;
+background: transparent;
+border: none;
+border-radius: 0;
+padding: 0;
+width: auto;
+text-align: left;
+}
+
+#animeModal {
+display: none;
+position: fixed;
+top: 0; left: 0;
+width: 100%; height: 100%;
+background: rgba(0, 0, 0, 0.8);
+justify-content: center;
+align-items: center;
+z-index: 200;
+}
+
+.anime-modal-box {
+background:url('https://i.pinimg.com/1200x/09/6c/38/096c386345704f05700f9be0e1db82de.jpg');
+padding: 30px;
+border-radius: 15px;
+width: 500px;
+max-width: 90%;
+max-height: 80vh;
+overflow-y: auto;
+text-align: center;
+position: relative;
+border: 2px solid #ff0c3d;
+}
+
+.anime-modal-box h3 {
+font-family: 'Times New Roman', Times, serif;
+color: #2b2020;
+font-size: 26px;
+margin-bottom: 10px;
+}
+
+.anime-modal-box img {
+width: 180px;
+border-radius: 100px;
+margin-bottom: 15px;
+}
+
+.anime-modal-box p {
+font-family: 'Times New Roman', Times, serif;
+color: rgb(34, 29, 29);
+font-size: 15px;
+margin: 6px 0;
+text-align: left;
+}
+
+.anime-modal-box .description {
+font-family: 'Times New Roman', Times, serif;
+color: #000000;
+font-size: 14px;
+line-height: 1.6;
+margin-top: 10px;
+text-align: left;
+}
+
+.close-modal {
+position: absolute;
+top: 10px; right: 15px;
+background: none;
+border: none;
+color: #FF486D;
+font-size: 28px;
+cursor: pointer;
+}
+
+.close-modal:hover {
+color: white;
+background: none;
+}
+
+footer {
+background: #b63962bf;
+opacity: 1;
+padding: 30px;
+text-align: center;
+color: #FED0DB;
+font-size: 16px;
+flex-shrink: 0;
+width: 100%;
+box-sizing: border-box;
+margin-top: auto;
+}
+
+.footer-inner {
+max-width: 1100px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: 1.8fr 0.5fr 1.2fr;
+gap: 0px;
+}
+
+.footer-logo-text {
+font-family: "Palatino Linotype", serif;
+font-size: 50px;
+font-weight: bold;
+font-style: italic;
+color: #FF6D6D;
+margin-bottom: 14px;
+}
+
+.footer-desc {
+font-family: 'Trebuchet MS', sans-serif;
+font-size: 0.9rem;
+line-height: 1.7;
+color: #FED0DB;
+text-align: left;
+padding-bottom: 0;
+margin-bottom: 14px;
+}
+
+
+.footer-heading {
+font-family: "Palatino Linotype", serif;
+font-style: italic;
+font-weight: bold;
+font-size: 22px;
+color: #FF6D6D;
+margin-bottom: 18px;
+font-weight: 400;
+padding-right: 180px;
+}
+
+.footer-list {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
+.footer-list li {
+font-family: 'Trebuchet MS', sans-serif;
+font-size: 0.9rem;
+color: #FED0DB;
+margin-bottom: 12px;
+text-align: left;
+padding: 0;
+}
+
+
+.footer-email {
+color: #FF486D !important;
+}
+
+</style>
+</head>
+
+<body class="home-bg">
+
+<nav>
+<div class="logo">
+<img src="/logo.jpg" alt="AniScroll Logo">
+<h1>AniScroll</h1>
+</div>
+
+<div style="display:flex; align-items:center; flex-wrap:nowrap; gap:10px;">
+<button onclick="switchPage('search')">Home</button>
+<button onclick="switchPage('bookmarks')">Bookmarks</button>
+<button onclick="switchPage('mylist')">My Lists</button>
+<select id="genreFilter">
+<option value="">All Genres</option>
+</select>
+</div>
+
+<button id="authButton" class="boop">Login</button>
+</nav>
+
+<div class="container">
+
+<h2>Welcome to AniScroll</h2>
+<p>Your Anime Update</p>
+
+<div id="searchSection">
+<input type="text" class="search" id="search" placeholder="Search Anime...">
+<button onclick="getAnime()">Search</button>
+</div>
+
+<div id="loader">Loading...</div>
+
+<div id="pageHeading" class="page-heading" style="display:none;"></div>
+
+<div id="listTabs" style="display:none;">
+<button id="tab-Watching" onclick="switchTab('Watching')">Watching</button>
+<button id="tab-To Watch" onclick="switchTab('To Watch')">To Watch</button>
+<button id="tab-Completed" onclick="switchTab('Completed')">Completed</button>
+</div>
+
+<div id="results"></div>
+
+</div>
+
+<div id="loginModal">
+<div class="modal-box">
+<div id="loginFormBox">
+<h2>Login</h2>
+<form id="loginForm">
+<input type="email" id="loginEmail" placeholder="Email" required>
+<input type="password" id="loginPassword" placeholder="Password" required>
+<button type="submit">Login</button>
+</form>
+<p>Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
+</div>
+
+<div id="signupFormBox" style="display:none;">
+<h2>Sign Up</h2>
+<form id="signupForm">
+<input type="email" id="signupEmail" placeholder="Email" required>
+<input type="password" id="signupPassword" placeholder="Password" required>
+<input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+<button type="submit">Sign Up</button>
+</form>
+<p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+</div>
+
+<button onclick="closeLogin()">Close</button>
+</div>
+</div>
+
+<div id="animeModal">
+<div class="anime-modal-box">
+<button class="close-modal" onclick="closeAnimeModal()">✕</button>
+<div id="animeModalContent"></div>
+</div>
+</div>
+
+<footer>
+<p>&copy; 2024 AniScroll. All rights reserved. | <a href="#" style="color:#FED0DB;">Terms</a> | <a href="#" style="color:#FED0DB;">Privacy</a></p>
+<p> Your Anime Update </p>
+
+<br></br>
+
+<div class="footer-inner">
+
+<div class="footer-col footer-about">
+<div class="footer-logo-text">About Us</div>
+<p class="footer-desc"> AniScroll is your designated anime tracker and bookmarker.
+Designed to cater to your anime needs. We at Aniscroll are a team of anime lovers
+that created this website based on our own frustration with not being able to
+conveniently keep track of anime. Feel free to contact us if any problems arrise
+while in use of this website. </p>
+</div>
+
+<div></div>
+
+<div class="footer-col">
+<h4 class="footer-heading">Contact</h4>
+<ul class="footer-list">
+<li>📍 જ⁀➴Port of Spain, Trinidad</li>
+<li>☎️ Phone: (868) 000-0000</li>
+<li>💌 Email: <a href="mailto:aniscroll.com" class="footer-email">aniscroll@gmail.com</a></li>
+<li>👾 Discord: aniscroll_official</li>
+</ul>
+</div>
+
+
+
+</div>
+
+</div>
+
+
+</footer>
+
+<script>
+let currentPage = "search";
+let currentTab = "Watching";
+
+const authBtn = document.getElementById("authButton");
+
+authBtn.addEventListener("click", function () {
+let user = localStorage.getItem("user");
+if (user) {
+localStorage.removeItem("user");
+authBtn.textContent = "Login";
+alert("Logged out");
+} else {
+openLogin();
+}
+});
+
+document.getElementById("search").addEventListener("keypress", function(e) {
+if (e.key === "Enter") getAnime();
+});
+
+function isLoggedIn() {
+return localStorage.getItem("user") !== null;
+}
+
+function openLogin() {
+document.getElementById("loginModal").style.display = "flex";
+}
+
+function closeLogin() {
+document.getElementById("loginModal").style.display = "none";
+}
+
+function showSignup() {
+loginFormBox.style.display = "none";
+signupFormBox.style.display = "block";
+}
+
+function showLogin() {
+signupFormBox.style.display = "none";
+loginFormBox.style.display = "block";
+}
+
+function showLoader() {
+document.getElementById("loader").style.display = "block";
+document.getElementById("results").innerHTML = "";
+}
+
+function hideLoader() {
+document.getElementById("loader").style.display = "none";
+}
+
+function openAnimeModal(id) {
+document.getElementById("animeModal").style.display = "flex";
+document.getElementById("animeModalContent").innerHTML = "<p style='color:white; text-align:center;'>Loading...</p>";
+
+fetch("https://graphql.anilist.co", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+query: `
+query ($id: Int) {
+Media(id: $id, type: ANIME) {
+title { romaji english }
+averageScore
+episodes
+status
+genres
+description(asHtml: false)
+coverImage { large }
+}
+}`,
+variables: { id: id }
+})
+})
+.then(res => res.json())
+.then(data => {
+const a = data.data.Media;
+const desc = a.description ? a.description.replace(/<[^>]+>/g, '').slice(0, 300) + "..." : "No description available.";
+document.getElementById("animeModalContent").innerHTML = `
+<img src="${a.coverImage.large}">
+<h3>${a.title.romaji}</h3>
+${a.title.english ? `<p style="color:#FED0DB; text-align:center;">English: ${a.title.english}</p>` : ''}
+<p>⭐ Score: ${a.averageScore || "N/A"}</p>
+<p>📺 Episodes: ${a.episodes || "N/A"}</p>
+<p>📌 Status: ${a.status || "N/A"}</p>
+<p>🎭 Genres: ${a.genres ? a.genres.join(', ') : "N/A"}</p>
+<p class="description">${desc}</p>
+`;
+});
+}
+
+function closeAnimeModal() {
+document.getElementById("animeModal").style.display = "none";
+}
+
+function switchPage(page) {
+currentPage = page;
+searchSection.style.display = page === "search" ? "flex" : "none";
+listTabs.style.display = page === "mylist" ? "block" : "none";
+
+const heading = document.getElementById("pageHeading");
+if (page === "bookmarks") {
+heading.textContent = "My Bookmarks";
+heading.style.display = "block";
+} else if (page === "mylist") {
+heading.textContent = "My Lists";
+heading.style.display = "block";
+} else {
+heading.style.display = "none";
+}
+
+if (page !== "search") {
+document.getElementById("genreFilter").value = "";
+}
+
+document.body.classList.remove("home-bg", "other-bg");
+if (page === "search") {
+document.body.classList.add("home-bg");
+} else {
+document.body.classList.add("other-bg");
+}
+render();
+}
+
+function switchTab(tab) {
+currentTab = tab;
+document.querySelectorAll("#listTabs button").forEach(btn => btn.classList.remove("active-tab"));
+document.getElementById("tab-" + tab).classList.add("active-tab");
+render();
+}
+
+function render() {
+if (currentPage === "search") getAllAnime();
+else if (currentPage === "bookmarks") loadBookmarks();
+else loadList();
+}
+
+function populateGenreFilter() {
+const genres = ['Action','Romance','Comedy','Fantasy','Sci-Fi','Horror','Slice of Life','Sports','Mystery','Thriller','Supernatural','Adventure'];
+const filter = document.getElementById('genreFilter');
+filter.innerHTML = '<option value="">All Genres</option>';
+genres.forEach(genre => {
+const option = document.createElement('option');
+option.value = genre;
+option.textContent = genre;
+filter.appendChild(option);
+});
+}
+
+document.getElementById('genreFilter').addEventListener('change', function() {
+const genre = this.value;
+if (currentPage !== "search") switchPage("search");
+if (genre) {
+getAnimeByGenre(genre);
+} else {
+getAllAnime();
+}
+});
+
+function getAnime() {
+let query = document.getElementById("search").value;
+if (!query) return;
+showLoader();
+fetch("https://graphql.anilist.co", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+query: `
+query ($search: String) {
+Page(page: 1, perPage: 10) {
+media(search: $search, type: ANIME) {
+id
+title { romaji }
+averageScore
+coverImage { large }
+genres
+}
+}
+}`,
+variables: { search: query }
+})
+})
+.then(res => res.json())
+.then(data => {
+hideLoader();
+const results = data.data.Page.media;
+if (results.length === 0) {
+document.getElementById("results").innerHTML = "<p>No results found!</p>";
+} else {
+displayAnime(results);
+}
+})
+.catch(() => {
+hideLoader();
+document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+});
+}
+
+function getAllAnime() {
+showLoader();
+fetch("https://graphql.anilist.co", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+query: `
+{
+Page(page: 1, perPage: 15) {
+media(type: ANIME, sort: SCORE_DESC) {
+id
+title { romaji }
+averageScore
+coverImage { large }
+genres
+}
+}
+}`
+})
+})
+.then(res => res.json())
+.then(data => {
+hideLoader();
+displayAnime(data.data.Page.media);
+})
+.catch(() => {
+hideLoader();
+document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+});
+}
+
+function getAnimeByGenre(genre) {
+showLoader();
+fetch("https://graphql.anilist.co", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+query: `
+query ($genre: String) {
+Page(page: 1, perPage: 15) {
+media(type: ANIME, genre_in: [$genre], sort: SCORE_DESC) {
+id
+title { romaji }
+averageScore
+coverImage { large }
+genres
+}
+}
+}`,
+variables: { genre: genre }
+})
+})
+.then(res => res.json())
+.then(data => {
+hideLoader();
+if (data.errors) {
+document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+return;
+}
+const results = data.data.Page.media;
+if (results.length === 0) {
+document.getElementById("results").innerHTML = "<p>No results found!</p>";
+} else {
+displayAnime(results);
+}
+})
+.catch(() => {
+hideLoader();
+document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+});
+}
+
+function displayAnime(list) {
+let container = document.getElementById("results");
+container.innerHTML = "";
+list.forEach(anime => {
+let div = document.createElement("div");
+div.className = "card";
+div.innerHTML = `
+<img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
+<h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
+<p>Score: ${anime.averageScore || "N/A"}</p>
+<p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
+<button onclick='bookmarkAnime(${JSON.stringify(anime)})'>Bookmark</button>
+`;
+container.appendChild(div);
+});
+}
+
+function bookmarkAnime(anime) {
+if (!isLoggedIn()) {
+alert("Login first!");
+openLogin();
+return;
+}
+let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+if (!bookmarks.some(a => a.id === anime.id)) {
+bookmarks.push(anime);
+localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+alert("Bookmarked!");
+} else {
+alert("Already bookmarked!");
+}
+}
+
+function loadBookmarks() {
+let container = document.getElementById("results");
+container.innerHTML = "";
+let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+if (bookmarks.length === 0) {
+container.innerHTML = "<p>No bookmarks yet!</p>";
+return;
+}
+bookmarks.forEach(anime => {
+let div = document.createElement("div");
+div.className = "card";
+div.innerHTML = `
+<img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
+<h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
+<p>Score: ${anime.averageScore || "N/A"}</p>
+<p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
+<button onclick='removeBookmark(${anime.id})'>Remove</button>
+<select onchange='moveToList(${anime.id}, this.value)'>
+<option value="">Add to List</option>
+<option value="Watching">Watching</option>
+<option value="To Watch">To Watch</option>
+<option value="Completed">Completed</option>
+</select>
+`;
+container.appendChild(div);
+});
+}
+
+function removeBookmark(id) {
+let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+bookmarks = bookmarks.filter(a => a.id !== id);
+localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+loadBookmarks();
+}
+
+function moveToList(id, listName) {
+if (!listName) return;
+let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+let anime = bookmarks.find(a => a.id === id);
+if (!anime) return;
+let list = JSON.parse(localStorage.getItem(listName)) || [];
+if (!list.some(a => a.id === id)) {
+list.push(anime);
+localStorage.setItem(listName, JSON.stringify(list));
+alert(`Added to ${listName}!`);
+}
+}
+
+function loadList() {
+let container = document.getElementById("results");
+container.innerHTML = "";
+document.querySelectorAll("#listTabs button").forEach(btn => btn.classList.remove("active-tab"));
+const activeBtn = document.getElementById("tab-" + currentTab);
+if (activeBtn) activeBtn.classList.add("active-tab");
+
+let list = JSON.parse(localStorage.getItem(currentTab)) || [];
+if (list.length === 0) {
+container.innerHTML = `<p>No anime in ${currentTab} yet!</p>`;
+return;
+}
+list.forEach(anime => {
+let div = document.createElement("div");
+div.className = "card";
+div.innerHTML = `
+<img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
+<h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
+<p>Score: ${anime.averageScore || "N/A"}</p>
+<p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
+<button onclick='removeFromList(${anime.id})'>Remove</button>
+`;
+container.appendChild(div);
+});
+}
+
+function removeFromList(id) {
+let list = JSON.parse(localStorage.getItem(currentTab)) || [];
+list = list.filter(a => a.id !== id);
+localStorage.setItem(currentTab, JSON.stringify(list));
+loadList();
+}
+
+loginForm.addEventListener("submit", function(e){
+e.preventDefault();
+let email = loginEmail.value;
+let password = loginPassword.value;
+window.loginUser(email, password);
+});
+
+signupForm.addEventListener("submit", function(e){
+e.preventDefault();
+if (signupPassword.value !== confirmPassword.value) {
+alert("Passwords don't match");
+return;
+}
+let email = signupEmail.value;
+let password = signupPassword.value;
+window.signupUser(email, password);
+});
+
+window.onload = function() {
+populateGenreFilter();
+switchPage("search");
+};
+</script>
+
+<script type="module">
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import firebaseConfig from "/firebaseConfig.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Expose login functions to global scope
+window.loginUser = function(email, password) {
+  signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+    localStorage.setItem("user", userCredential.user.email);
+    document.getElementById("authButton").textContent = "Logout";
+    document.getElementById("loginModal").style.display = "none";
+    alert("Welcome " + email);
+    document.getElementById("loginForm").reset();
+  }).catch((error) => {
+    alert("Login failed: " + error.message);
+  });
+};
+
+window.signupUser = function(email, password) {
+  createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+    alert("Account created!");
+    document.getElementById("signupForm").reset();
+    document.getElementById("signupFormBox").style.display = "none";
+    document.getElementById("loginFormBox").style.display = "block";
+  }).catch((error) => {
+    alert("Signup failed: " + error.message);
+  });
+};
+
+async function createBobAccount() {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      "bob@mail.com",
+      "bobpass"
+    );
+    
+    await updateProfile(userCredential.user, {
+      displayName: "bob"
+    });
+    
+    console.log("Bob account created:", userCredential.user);
+  } catch (error) {
+    console.error("Error creating Bob account:", error.message);
+  }
+}
+
+createBobAccount();
+</script>
+
+</body>
+</html>
