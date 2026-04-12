@@ -11,3 +11,6 @@ Group Roles: UI Design- Anora Martin
              Marketing- Karimah Beckles
              Lead- Angel Prince
              DevOPs- Ashely Lewis
+
+  Hosting URL: https://aniscroll-23cd8.web.app/
+  
