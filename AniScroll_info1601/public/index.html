@@ -560,9 +560,288 @@ while in use of this website. </p>
 
 </footer>
 
-</body>
-</html>
 
+<script>
+let currentPage = "search";
+let currentTab = "Watching";
+
+// Get login/logout button
+const authBtn = document.getElementById("authButton");
+
+authBtn.addEventListener("click", function () {
+let user = localStorage.getItem("user");
+if (user) {
+localStorage.removeItem("user");
+authBtn.textContent = "Login";
+alert("Logged out");
+} else {
+openLogin();
+}
+});
+
+// When user presses enter in search box
+document.getElementById("search").addEventListener("keypress", function(e) {
+if (e.key === "Enter") getAnime();
+});
+
+// Checks if user is logged in
+function isLoggedIn() {
+return localStorage.getItem("user") !== null;
+}
+
+function openLogin() {
+document.getElementById("loginModal").style.display = "flex";
+}
+
+function closeLogin() {
+document.getElementById("loginModal").style.display = "none";
+}
+
+function showSignup() {
+loginFormBox.style.display = "none";
+signupFormBox.style.display = "block";
+}
+
+function showLogin() {
+signupFormBox.style.display = "none";
+loginFormBox.style.display = "block";
+}
+
+function showLoader() {
+document.getElementById("loader").style.display = "block";
+document.getElementById("results").innerHTML = "";
+}
+
+function hideLoader() {
+document.getElementById("loader").style.display = "none";
+}
+
+function openAnimeModal(id) {
+document.getElementById("animeModal").style.display = "flex";
+document.getElementById("animeModalContent").innerHTML = "<p style='color:white; text-align:center;'>Loading...</p>";
+
+// Fetch anime details from Api
+fetch("https://graphql.anilist.co", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+query: `
+query ($id: Int) {
+Media(id: $id, type: ANIME) {
+title { romaji english }
+averageScore
+episodes
+status
+genres
+description(asHtml: false)
+coverImage { large }
+}
+}`,
+variables: { id: id }
+})
+})
+.then(res => res.json())
+.then(data => {
+const a = data.data.Media;
+const desc = a.description ? a.description.replace(/<[^>]+>/g, '').slice(0, 300) + "..." : "No description available.";
+document.getElementById("animeModalContent").innerHTML = `
+<img src="${a.coverImage.large}">
+<h3>${a.title.romaji}</h3>
+${a.title.english ? `<p style="color:#FED0DB; text-align:center;">English: ${a.title.english}</p>` : ''}
+<p>⭐ Score: ${a.averageScore || "N/A"}</p>
+<p>📺 Episodes: ${a.episodes || "N/A"}</p>
+<p>📌 Status: ${a.status || "N/A"}</p>
+<p>🎭 Genres: ${a.genres ? a.genres.join(', ') : "N/A"}</p>
+<p class="description">${desc}</p>
+`;
+});
+}
+
+function closeAnimeModal() {
+document.getElementById("animeModal").style.display = "none";
+}
+
+function switchPage(page) {
+currentPage = page;
+searchSection.style.display = page === "search" ? "flex" : "none";
+listTabs.style.display = page === "mylist" ? "block" : "none";
+
+const heading = document.getElementById("pageHeading");
+if (page === "bookmarks") {
+heading.textContent = "My Bookmarks";
+heading.style.display = "block";
+} else if (page === "mylist") {
+heading.textContent = "My Lists";
+heading.style.display = "block";
+} else {
+heading.style.display = "none";
+}
+
+if (page !== "search") {
+document.getElementById("genreFilter").value = "";
+}
+
+document.body.classList.remove("home-bg", "other-bg");
+if (page === "search") {
+document.body.classList.add("home-bg");
+} else {
+document.body.classList.add("other-bg");
+}
+render();
+}
+
+// Switch Between Watching/ To Watch/ Completed
+function switchTab(tab) {
+currentTab = tab;
+document.querySelectorAll("#listTabs button").forEach(btn => btn.classList.remove("active-tab"));
+document.getElementById("tab-" + tab).classList.add("active-tab");
+render();
+}
+
+function render() {
+if (currentPage === "search") getAllAnime();
+else if (currentPage === "bookmarks") loadBookmarks();
+else loadList();
+}
+
+// Fill dropdown with genres
+function populateGenreFilter() {
+const genres = ['Action','Romance','Comedy','Fantasy','Sci-Fi','Horror','Slice of Life','Sports','Mystery','Thriller','Supernatural','Adventure'];
+const filter = document.getElementById('genreFilter');
+filter.innerHTML = '<option value="">All Genres</option>';
+genres.forEach(genre => {
+const option = document.createElement('option');
+option.value = genre;
+option.textContent = genre;
+filter.appendChild(option);
+});
+}
+
+// When genre changes to filter anime
+document.getElementById('genreFilter').addEventListener('change', function() {
+const genre = this.value;
+if (currentPage !== "search") switchPage("search");
+if (genre) {
+getAnimeByGenre(genre);
+} else {
+getAllAnime();
+}
+});
+
+// Search function 
+function getAnime() {
+let query = document.getElementById("search").value;
+if (!query) return;
+showLoader();
+// fetch search results from api
+fetch("https://graphql.anilist.co", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+query: `
+query ($search: String) {
+Page(page: 1, perPage: 10) {
+media(search: $search, type: ANIME) {
+id
+title { romaji }
+averageScore
+coverImage { large }
+genres
+}
+}
+}`,
+variables: { search: query }
+})
+})
+.then(res => res.json())
+.then(data => {
+hideLoader();
+const results = data.data.Page.media;
+if (results.length === 0) {
+document.getElementById("results").innerHTML = "<p>No results found!</p>";
+} else {
+displayAnime(results);
+}
+})
+.catch(() => {
+hideLoader();
+document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+});
+}
+
+// Get anime function 
+function getAllAnime() {
+showLoader();
+fetch("https://graphql.anilist.co", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+query: `
+{
+Page(page: 1, perPage: 15) {
+media(type: ANIME, sort: SCORE_DESC) {
+id
+title { romaji }
+averageScore
+coverImage { large }
+genres
+}
+}
+}`
+})
+})
+.then(res => res.json())
+.then(data => {
+hideLoader();
+displayAnime(data.data.Page.media);
+})
+.catch(() => {
+hideLoader();
+document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+});
+}
+
+// Get anime by genre
+function getAnimeByGenre(genre) {
+showLoader();
+fetch("https://graphql.anilist.co", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({
+query: `
+query ($genre: String) {
+Page(page: 1, perPage: 15) {
+media(type: ANIME, genre_in: [$genre], sort: SCORE_DESC) {
+id
+title { romaji }
+averageScore
+coverImage { large }
+genres
+}
+}
+}`,
+variables: { genre: genre }
+})
+})
+.then(res => res.json())
+.then(data => {
+hideLoader();
+if (data.errors) {
+document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+return;
+}
+const results = data.data.Page.media;
+if (results.length === 0) {
+document.getElementById("results").innerHTML = "<p>No results found!</p>";
+} else {
+displayAnime(results);
+}
+})
+.catch(() => {
+hideLoader();
+document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+});
+}
 
 
 
