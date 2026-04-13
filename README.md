@@ -13,4 +13,10 @@ Group Roles: UI Design- Anora Martin
              DevOPs- Ashely Lewis
 
   Hosting URL: https://aniscroll-23cd8.web.app/
+
+  Credentials
+  email bob@mail.com
+  password: bobpass
+
+  
   
