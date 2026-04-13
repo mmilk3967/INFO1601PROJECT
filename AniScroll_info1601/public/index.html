@@ -4,3 +4,441 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AniScroll</title>
+
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Trebuchet MS', Arial, sans-serif;
+}
+
+html, body {
+
+width: 100%;
+}
+
+body {
+font-size: 20px;
+color: #0C0404;
+transition: background 0.5s ease;
+display: flex;
+flex-direction: column;
+
+min-height: 100vh;
+}
+
+.home-bg {
+background: url('home page.jpeg') no-repeat center center fixed;
+background-size: cover;
+}
+
+.other-bg {
+background: url('anime-bg.jpg') no-repeat center center fixed;
+background-size: cover;
+}
+
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 100;
+display: flex;
+align-items: center;
+padding: 0 48px;
+height: 115px;
+background: rgba(182, 57, 98, 0.75);
+backdrop-filter: blur(18px);
+gap: 40px;
+}
+
+.logo {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+}
+
+.logo img {
+width: 130px;
+border-radius: 100px;
+height: 100px;
+}
+
+.logo:hover img {
+transform: scale(1.05);
+transition: transform 0.3s ease;
+
+}
+
+.logo h1 {
+font-family: Georgia, serif;
+font-size: 60px;
+padding-left: 20px;
+color: #461220;
+margin-right: 40px;
+}
+
+.container {
+margin-top: 115px;
+flex: 1;
+width: 100%;
+padding: 30px;
+background: url("https://i.pinimg.com/736x/2c/9e/f4/2c9ef438a1a5406290bf5c4936d86414.jpg");
+display: flex;
+backdrop-filter: blur(10px);
+flex-direction: column;
+align-items: center;
+}
+
+button {
+padding: 8px 12px;
+margin: 5px;
+border: none;
+border-radius: 8px;
+background: #FF486D;
+color: #FED0DB;
+cursor: pointer;
+font-size: 18px;
+}
+
+button:hover {
+background: #b81e1e;
+}
+
+button.active-tab {
+background: #b81e1e;
+border: 2px solid #FED0DB;
+}
+
+input, select {
+padding: 10px;
+margin: 10px 5px;
+border-radius: 8px;
+border: none;
+}
+
+#genreFilter {
+background: #FF486D;
+color: #FED0DB;
+font-size: 18px;
+padding: 8px 12px;
+border-radius: 8px;
+border: none;
+cursor: pointer;
+}
+
+#genreFilter:hover {
+background: #b81e1e;
+}
+
+#searchSection {
+display: flex;
+gap: 15px;
+margin: 30px auto;
+width: 100%;
+max-width: 800px;
+justify-content: center;
+align-items: center;
+}
+
+#searchSection input {
+padding: 20px 25px;
+font-size: 20px;
+width: 500px;
+border: 2px solid transparent;
+transition: all 0.3s ease;
+background: rgba(255,255,255,0.9);
+}
+
+#searchSection input:hover {
+background: white;
+box-shadow: 0 0 15px rgba(255, 72, 109, 0.5);
+border-color: #FF486D;
+transform: translateY(-2px);
+}
+
+#searchSection input:focus {
+outline: none;
+background: white;
+box-shadow: 0 0 20px rgba(255, 72, 109, 0.7);
+border-color: #FF486D;
+}
+
+#searchSection button {
+padding: 20px 40px;
+font-size: 20px;
+white-space: nowrap;
+}
+
+#results {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+gap: 20px;
+width: 100%;
+max-width: 1200px;
+}
+
+.card {
+background: rgba(61, 47, 47, 0.1);
+padding: 15px;
+border-radius: 10px;
+text-align: center;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 8px;
+}
+
+.card:hover {
+transform: translateY(-5px);
+box-shadow: 0 8px 20px rgba(255, 72, 109, 0.5);
+transition: all 0.3s ease;
+background: rgba(94, 73, 73, 0.2);
+cursor: pointer;
+}
+
+.card img {
+width: 160px;
+height: 220px;
+object-fit: cover;
+border-radius: 10px;
+cursor: pointer;
+}
+
+.card h3 {
+color: #100a0a;
+font-size: 16px;
+margin-top: 5px;
+cursor: pointer;
+}
+
+.card p {
+color: rgb(0, 0, 0);
+font-size: 16px;
+}
+
+.card .genres {
+color: #000000;
+font-size: 13px;
+font-style: italic;
+}
+
+.card select {
+background: #FF486D;
+color: #FED0DB;
+font-size: 14px;
+padding: 6px 10px;
+border-radius: 8px;
+border: none;
+cursor: pointer;
+margin-top: 5px;
+}
+
+.page-heading {
+color: #FF6D6D;
+font-size: 36px;
+margin-bottom: 20px;
+text-align: center;
+}
+
+#listTabs {
+margin-bottom: 20px;
+}
+
+#loader {
+display: none;
+color: white;
+font-size: 22px;
+margin: 30px auto;
+text-align: center;
+}
+
+img {
+border-radius: 10px;
+}
+
+h2 {
+text-align: center;
+font-size: 40px;
+color: #FF6D6D;
+}
+
+p {
+text-align: center;
+font-size: 22px;
+color: rgb(0, 0, 0);
+}
+
+#loginModal {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.7);
+justify-content: center;
+align-items: center;
+z-index: 150;
+}
+
+.modal-box {
+background: white;
+padding: 20px;
+border-radius: 10px;
+width: 300px;
+text-align: center;
+}
+
+.search {
+display: inline;
+margin: 0;
+background: transparent;
+border: none;
+border-radius: 0;
+padding: 0;
+width: auto;
+text-align: left;
+}
+
+#animeModal {
+display: none;
+position: fixed;
+top: 0; left: 0;
+width: 100%; height: 100%;
+background: rgba(0, 0, 0, 0.8);
+justify-content: center;
+align-items: center;
+z-index: 200;
+}
+
+.anime-modal-box {
+background:url('https://i.pinimg.com/1200x/09/6c/38/096c386345704f05700f9be0e1db82de.jpg');
+padding: 30px;
+border-radius: 15px;
+width: 500px;
+max-width: 90%;
+max-height: 80vh;
+overflow-y: auto;
+text-align: center;
+position: relative;
+border: 2px solid #ff0c3d;
+}
+
+.anime-modal-box h3 {
+font-family: 'Times New Roman', Times, serif;
+color: #2b2020;
+font-size: 26px;
+margin-bottom: 10px;
+}
+
+.anime-modal-box img {
+width: 180px;
+border-radius: 100px;
+margin-bottom: 15px;
+}
+
+.anime-modal-box p {
+font-family: 'Times New Roman', Times, serif;
+color: rgb(34, 29, 29);
+font-size: 15px;
+margin: 6px 0;
+text-align: left;
+}
+
+.anime-modal-box .description {
+font-family: 'Times New Roman', Times, serif;
+color: #000000;
+font-size: 14px;
+line-height: 1.6;
+margin-top: 10px;
+text-align: left;
+}
+
+.close-modal {
+position: absolute;
+top: 10px; right: 15px;
+background: none;
+border: none;
+color: #FF486D;
+font-size: 28px;
+cursor: pointer;
+}
+
+.close-modal:hover {
+color: white;
+background: none;
+}
+
+footer {
+background: #b63962bf;
+opacity: 1;
+padding: 30px;
+text-align: center;
+color: #FED0DB;
+font-size: 16px;
+flex-shrink: 0;
+width: 100%;
+box-sizing: border-box;
+margin-top: auto;
+}
+
+.footer-inner {
+max-width: 1100px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: 1.8fr 0.5fr 1.2fr;
+gap: 0px;
+}
+
+.footer-logo-text {
+font-family: "Palatino Linotype", serif;
+font-size: 50px;
+font-weight: bold;
+font-style: italic;
+color: #FF6D6D;
+margin-bottom: 14px;
+}
+
+.footer-desc {
+font-family: 'Trebuchet MS', sans-serif;
+font-size: 0.9rem;
+line-height: 1.7;
+color: #FED0DB;
+text-align: left;
+padding-bottom: 0;
+margin-bottom: 14px;
+}
+
+
+.footer-heading {
+font-family: "Palatino Linotype", serif;
+font-style: italic;
+font-weight: bold;
+font-size: 22px;
+color: #FF6D6D;
+margin-bottom: 18px;
+font-weight: 400;
+padding-right: 180px;
+}
+
+.footer-list {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
+.footer-list li {
+font-family: 'Trebuchet MS', sans-serif;
+font-size: 0.9rem;
+color: #FED0DB;
+margin-bottom: 12px;
+text-align: left;
+padding: 0;
+}
+
+
+.footer-email {
+color: #FF486D !important;
+}
+
+</style>
