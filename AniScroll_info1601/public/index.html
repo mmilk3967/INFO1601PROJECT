@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +14,6 @@ font-family: 'Trebuchet MS', Arial, sans-serif;
 }
 
 html, body {
-
 width: 100%;
 }
 
@@ -25,17 +23,18 @@ color: #0C0404;
 transition: background 0.5s ease;
 display: flex;
 flex-direction: column;
-
 min-height: 100vh;
 }
 
 .home-bg {
-background: url('home page.jpeg') no-repeat center center fixed;
+background: url('home page.jpg') no-repeat center center fixed;
+backdrop-filter: blur(0px);
 background-size: cover;
 }
 
 .other-bg {
 background: url('anime-bg.jpg') no-repeat center center fixed;
+backdrop-filter: blur(0px);
 background-size: cover;
 }
 
@@ -56,18 +55,12 @@ gap: 40px;
 display: flex;
 align-items: center;
 gap: 0.75rem;
+margin-left: 12px;
 }
 
 .logo img {
-width: 130px;
-border-radius: 100px;
-height: 100px;
-}
-
-.logo:hover img {
-transform: scale(1.05);
-transition: transform 0.3s ease;
-
+width: 135px;
+height: 120px;
 }
 
 .logo h1 {
@@ -83,9 +76,10 @@ margin-top: 115px;
 flex: 1;
 width: 100%;
 padding: 30px;
-background: url("https://i.pinimg.com/736x/2c/9e/f4/2c9ef438a1a5406290bf5c4936d86414.jpg");
-display: flex;
+background: rgba(0,0,0,0.6);
 backdrop-filter: blur(10px);
+
+display: flex;
 flex-direction: column;
 align-items: center;
 }
@@ -193,7 +187,7 @@ gap: 8px;
 transform: translateY(-5px);
 box-shadow: 0 8px 20px rgba(255, 72, 109, 0.5);
 transition: all 0.3s ease;
-background: rgba(94, 73, 73, 0.2);
+background: rgba(255,255,255,0.2);
 cursor: pointer;
 }
 
@@ -206,19 +200,19 @@ cursor: pointer;
 }
 
 .card h3 {
-color: #100a0a;
+color: #FF6D6D;
 font-size: 16px;
 margin-top: 5px;
 cursor: pointer;
 }
 
 .card p {
-color: rgb(0, 0, 0);
+color: white;
 font-size: 16px;
 }
 
 .card .genres {
-color: #000000;
+color: #FED0DB;
 font-size: 13px;
 font-style: italic;
 }
@@ -266,7 +260,7 @@ color: #FF6D6D;
 p {
 text-align: center;
 font-size: 22px;
-color: rgb(0, 0, 0);
+color: white;
 }
 
 #loginModal {
@@ -302,6 +296,7 @@ text-align: left;
 }
 
 #animeModal {
+
 display: none;
 position: fixed;
 top: 0; left: 0;
@@ -313,7 +308,7 @@ z-index: 200;
 }
 
 .anime-modal-box {
-background:url('https://i.pinimg.com/1200x/09/6c/38/096c386345704f05700f9be0e1db82de.jpg');
+background:rgb(236, 152, 166);
 padding: 30px;
 border-radius: 15px;
 width: 500px;
@@ -322,32 +317,29 @@ max-height: 80vh;
 overflow-y: auto;
 text-align: center;
 position: relative;
-border: 2px solid #ff0c3d;
+border: 2px solid #FF486D;
 }
 
 .anime-modal-box h3 {
-font-family: 'Times New Roman', Times, serif;
-color: #2b2020;
+color: #0a0a0a;
 font-size: 26px;
 margin-bottom: 10px;
 }
 
 .anime-modal-box img {
 width: 180px;
-border-radius: 100px;
+border-radius: 10px;
 margin-bottom: 15px;
 }
 
 .anime-modal-box p {
-font-family: 'Times New Roman', Times, serif;
-color: rgb(34, 29, 29);
+color: rgb(255, 231, 231);
 font-size: 15px;
 margin: 6px 0;
 text-align: left;
 }
 
 .anime-modal-box .description {
-font-family: 'Times New Roman', Times, serif;
 color: #000000;
 font-size: 14px;
 line-height: 1.6;
@@ -442,6 +434,11 @@ padding: 0;
 color: #FF486D !important;
 }
 
+
+.boop{
+background-color: #301e23;
+
+}
 </style>
 </head>
 
@@ -449,7 +446,7 @@ color: #FF486D !important;
 
 <nav>
 <div class="logo">
-<img src="https://raw.githubusercontent.com/mmilk3967/INFO1601PROJECT/refs/heads/main/AniScroll_info1601/public/images/IMG_0444.PNG" alt="AniScroll Logo">
+<img src="IMG_0444.PNG"/>
 <h1>AniScroll</h1>
 </div>
 
@@ -494,7 +491,7 @@ color: #FF486D !important;
 <div id="loginFormBox">
 <h2>Login</h2>
 <form id="loginForm">
-<input type="email" id="loginEmail" placeholder="Email" required>
+<input type="text" id="loginUsername" placeholder="Username" required>
 <input type="password" id="loginPassword" placeholder="Password" required>
 <button type="submit">Login</button>
 </form>
@@ -504,7 +501,7 @@ color: #FF486D !important;
 <div id="signupFormBox" style="display:none;">
 <h2>Sign Up</h2>
 <form id="signupForm">
-<input type="email" id="signupEmail" placeholder="Email" required>
+<input type="text" id="signupUsername" placeholder="Username" required>
 <input type="password" id="signupPassword" placeholder="Password" required>
 <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
 <button type="submit">Sign Up</button>
@@ -948,9 +945,18 @@ loadList();
 
 loginForm.addEventListener("submit", function(e){
 e.preventDefault();
-let email = loginEmail.value;
-let password = loginPassword.value;
-window.loginUser(email, password);
+let u = loginUsername.value;
+let p = loginPassword.value;
+let users = JSON.parse(localStorage.getItem("users")) || {};
+if (!users[u] || users[u] !== p) {
+alert("Invalid login");
+return;
+}
+
+localStorage.setItem("user", u);
+authBtn.textContent = "Logout";
+closeLogin();
+alert("Welcome " + u);
 });
 
 signupForm.addEventListener("submit", function(e){
@@ -959,68 +965,17 @@ if (signupPassword.value !== confirmPassword.value) {
 alert("Passwords don't match");
 return;
 }
-let email = signupEmail.value;
-let password = signupPassword.value;
-window.signupUser(email, password);
+let users = JSON.parse(localStorage.getItem("users")) || {};
+users[signupUsername.value] = signupPassword.value;
+localStorage.setItem("users", JSON.stringify(users));
+alert("Account created!");
+showLogin();
 });
 
 window.onload = function() {
 populateGenreFilter();
 switchPage("search");
 };
-</script>
-
-<script type="module">
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import firebaseConfig from "/firebaseConfig.js";
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// Expose login functions to global scope
-window.loginUser = function(email, password) {
-signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-localStorage.setItem("user", userCredential.user.email);
-document.getElementById("authButton").textContent = "Logout";
-document.getElementById("loginModal").style.display = "none";
-alert("Welcome " + email);
-document.getElementById("loginForm").reset();
-}).catch((error) => {
-alert("Login failed: " + error.message);
-});
-};
-
-window.signupUser = function(email, password) {
-createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-alert("Account created!");
-document.getElementById("signupForm").reset();
-document.getElementById("signupFormBox").style.display = "none";
-document.getElementById("loginFormBox").style.display = "block";
-}).catch((error) => {
-alert("Signup failed: " + error.message);
-});
-};
-
-async function createBobAccount() {
-try {
-const userCredential = await createUserWithEmailAndPassword(
-auth,
-"bob@mail.com",
-"bobpass"
-);
-
-await updateProfile(userCredential.user, {
-displayName: "bob"
-});
-
-console.log("Bob account created:", userCredential.user);
-} catch (error) {
-console.error("Error creating Bob account:", error.message);
-}
-}
-
-createBobAccount();
 </script>
 
 </body>
