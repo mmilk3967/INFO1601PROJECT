@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AniScroll</title>
-
 
 <style>
 * {
@@ -29,7 +29,7 @@ flex-direction: column;
 min-height: 100vh;
 }
 
-  .home-bg {
+.home-bg {
 background: url('home page.jpeg') no-repeat center center fixed;
 background-size: cover;
 }
@@ -38,7 +38,6 @@ background-size: cover;
 background: url('anime-bg.jpg') no-repeat center center fixed;
 background-size: cover;
 }
-
 
 nav {
 position: fixed;
@@ -79,6 +78,17 @@ color: #461220;
 margin-right: 40px;
 }
 
+.container {
+margin-top: 115px;
+flex: 1;
+width: 100%;
+padding: 30px;
+background: url("https://i.pinimg.com/736x/2c/9e/f4/2c9ef438a1a5406290bf5c4936d86414.jpg");
+display: flex;
+backdrop-filter: blur(10px);
+flex-direction: column;
+align-items: center;
+}
 
 button {
 padding: 8px 12px;
@@ -429,23 +439,10 @@ padding: 0;
 
 
 .footer-email {
-color: #FF486D ;
-}
-
-  .container {
-margin-top: 115px;
-flex: 1;
-width: 100%;
-padding: 30px;
-background: url("https://i.pinimg.com/736x/2c/9e/f4/2c9ef438a1a5406290bf5c4936d86414.jpg");
-display: flex;
-backdrop-filter: blur(10px);
-flex-direction: column;
-align-items: center;
+color: #FF486D !important;
 }
 
 </style>
-
 </head>
 
 <body class="home-bg">
@@ -455,8 +452,6 @@ align-items: center;
 <img src="/logo.jpg" alt="AniScroll Logo">
 <h1>AniScroll</h1>
 </div>
-
-  
 
 <div style="display:flex; align-items:center; flex-wrap:nowrap; gap:10px;">
 <button onclick="switchPage('search')">Home</button>
@@ -570,7 +565,6 @@ while in use of this website. </p>
 let currentPage = "search";
 let currentTab = "Watching";
 
-// Get login/logout button
 const authBtn = document.getElementById("authButton");
 
 authBtn.addEventListener("click", function () {
@@ -584,12 +578,10 @@ openLogin();
 }
 });
 
-// When user presses enter in search box
 document.getElementById("search").addEventListener("keypress", function(e) {
 if (e.key === "Enter") getAnime();
 });
 
-// Checks if user is logged in
 function isLoggedIn() {
 return localStorage.getItem("user") !== null;
 }
@@ -625,7 +617,6 @@ function openAnimeModal(id) {
 document.getElementById("animeModal").style.display = "flex";
 document.getElementById("animeModalContent").innerHTML = "<p style='color:white; text-align:center;'>Loading...</p>";
 
-// Fetch anime details from Api
 fetch("https://graphql.anilist.co", {
 method: "POST",
 headers: {"Content-Type": "application/json"},
@@ -695,7 +686,6 @@ document.body.classList.add("other-bg");
 render();
 }
 
-// Switch Between Watching/ To Watch/ Completed
 function switchTab(tab) {
 currentTab = tab;
 document.querySelectorAll("#listTabs button").forEach(btn => btn.classList.remove("active-tab"));
@@ -709,7 +699,6 @@ else if (currentPage === "bookmarks") loadBookmarks();
 else loadList();
 }
 
-// Fill dropdown with genres
 function populateGenreFilter() {
 const genres = ['Action','Romance','Comedy','Fantasy','Sci-Fi','Horror','Slice of Life','Sports','Mystery','Thriller','Supernatural','Adventure'];
 const filter = document.getElementById('genreFilter');
@@ -722,7 +711,6 @@ filter.appendChild(option);
 });
 }
 
-// When genre changes to filter anime
 document.getElementById('genreFilter').addEventListener('change', function() {
 const genre = this.value;
 if (currentPage !== "search") switchPage("search");
@@ -733,12 +721,10 @@ getAllAnime();
 }
 });
 
-// Search function 
 function getAnime() {
 let query = document.getElementById("search").value;
 if (!query) return;
 showLoader();
-// fetch search results from api
 fetch("https://graphql.anilist.co", {
 method: "POST",
 headers: {"Content-Type": "application/json"},
@@ -774,7 +760,6 @@ document.getElementById("results").innerHTML = "<p>Error fetching results. Try a
 });
 }
 
-// Get anime function 
 function getAllAnime() {
 showLoader();
 fetch("https://graphql.anilist.co", {
@@ -806,7 +791,6 @@ document.getElementById("results").innerHTML = "<p>Error fetching results. Try a
 });
 }
 
-// Get anime by genre
 function getAnimeByGenre(genre) {
 showLoader();
 fetch("https://graphql.anilist.co", {
@@ -847,7 +831,208 @@ hideLoader();
 document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
 });
 }
-  
+
+function displayAnime(list) {
+let container = document.getElementById("results");
+container.innerHTML = "";
+list.forEach(anime => {
+let div = document.createElement("div");
+div.className = "card";
+div.innerHTML = `
+<img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
+<h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
+<p>Score: ${anime.averageScore || "N/A"}</p>
+<p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
+<button onclick='bookmarkAnime(${JSON.stringify(anime)})'>Bookmark</button>
+`;
+container.appendChild(div);
+});
+}
+
+function bookmarkAnime(anime) {
+if (!isLoggedIn()) {
+alert("Login first!");
+openLogin();
+return;
+}
+let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+if (!bookmarks.some(a => a.id === anime.id)) {
+bookmarks.push(anime);
+localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+alert("Bookmarked!");
+} else {
+alert("Already bookmarked!");
+}
+}
+
+function loadBookmarks() {
+let container = document.getElementById("results");
+container.innerHTML = "";
+let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+if (bookmarks.length === 0) {
+container.innerHTML = "<p>No bookmarks yet!</p>";
+return;
+}
+bookmarks.forEach(anime => {
+let div = document.createElement("div");
+div.className = "card";
+div.innerHTML = `
+<img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
+<h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
+<p>Score: ${anime.averageScore || "N/A"}</p>
+<p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
+<button onclick='removeBookmark(${anime.id})'>Remove</button>
+<select onchange='moveToList(${anime.id}, this.value)'>
+<option value="">Add to List</option>
+<option value="Watching">Watching</option>
+<option value="To Watch">To Watch</option>
+<option value="Completed">Completed</option>
+</select>
+`;
+container.appendChild(div);
+});
+}
+
+function removeBookmark(id) {
+let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+bookmarks = bookmarks.filter(a => a.id !== id);
+localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+loadBookmarks();
+}
+
+function moveToList(id, listName) {
+if (!listName) return;
+let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+let anime = bookmarks.find(a => a.id === id);
+if (!anime) return;
+let list = JSON.parse(localStorage.getItem(listName)) || [];
+if (!list.some(a => a.id === id)) {
+list.push(anime);
+localStorage.setItem(listName, JSON.stringify(list));
+alert(`Added to ${listName}!`);
+}
+}
+
+function loadList() {
+let container = document.getElementById("results");
+container.innerHTML = "";
+document.querySelectorAll("#listTabs button").forEach(btn => btn.classList.remove("active-tab"));
+const activeBtn = document.getElementById("tab-" + currentTab);
+if (activeBtn) activeBtn.classList.add("active-tab");
+
+let list = JSON.parse(localStorage.getItem(currentTab)) || [];
+if (list.length === 0) {
+container.innerHTML = `<p>No anime in ${currentTab} yet!</p>`;
+return;
+}
+list.forEach(anime => {
+let div = document.createElement("div");
+div.className = "card";
+div.innerHTML = `
+<img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
+<h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
+<p>Score: ${anime.averageScore || "N/A"}</p>
+<p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
+<button onclick='removeFromList(${anime.id})'>Remove</button>
+`;
+container.appendChild(div);
+});
+}
+
+function removeFromList(id) {
+let list = JSON.parse(localStorage.getItem(currentTab)) || [];
+list = list.filter(a => a.id !== id);
+localStorage.setItem(currentTab, JSON.stringify(list));
+loadList();
+}
+
+loginForm.addEventListener("submit", function(e){
+e.preventDefault();
+let email = loginEmail.value;
+let password = loginPassword.value;
+window.loginUser(email, password);
+});
+
+signupForm.addEventListener("submit", function(e){
+e.preventDefault();
+if (signupPassword.value !== confirmPassword.value) {
+alert("Passwords don't match");
+return;
+}
+let email = signupEmail.value;
+let password = signupPassword.value;
+window.signupUser(email, password);
+});
+
+window.onload = function() {
+populateGenreFilter();
+switchPage("search");
+};
+</script>
+
+<script type="module">
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import firebaseConfig from "/firebaseConfig.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Expose login functions to global scope
+window.loginUser = function(email, password) {
+signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+localStorage.setItem("user", userCredential.user.email);
+document.getElementById("authButton").textContent = "Logout";
+document.getElementById("loginModal").style.display = "none";
+alert("Welcome " + email);
+document.getElementById("loginForm").reset();
+}).catch((error) => {
+alert("Login failed: " + error.message);
+});
+};
+
+window.signupUser = function(email, password) {
+createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+alert("Account created!");
+document.getElementById("signupForm").reset();
+document.getElementById("signupFormBox").style.display = "none";
+document.getElementById("loginFormBox").style.display = "block";
+}).catch((error) => {
+alert("Signup failed: " + error.message);
+});
+};
+
+async function createBobAccount() {
+try {
+const userCredential = await createUserWithEmailAndPassword(
+auth,
+"bob@mail.com",
+"bobpass"
+);
+
+await updateProfile(userCredential.user, {
+displayName: "bob"
+});
+
+console.log("Bob account created:", userCredential.user);
+} catch (error) {
+console.error("Error creating Bob account:", error.message);
+}
+}
+
+createBobAccount();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
 // To show anime list
 function displayAnime(list) {
 let container = document.getElementById("results");
@@ -991,62 +1176,3 @@ populateGenreFilter();
 switchPage("search");
 };
 </script>
-
-
-<script type="module">
-// firebase
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import firebaseConfig from "/firebaseConfig.js";
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// Expose login functions to global scope
-window.loginUser = function(email, password) {
-signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-localStorage.setItem("user", userCredential.user.email);
-document.getElementById("authButton").textContent = "Logout";
-document.getElementById("loginModal").style.display = "none";
-alert("Welcome " + email);
-document.getElementById("loginForm").reset();
-}).catch((error) => {
-alert("Login failed: " + error.message);
-});
-};
-
-window.signupUser = function(email, password) {
-createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-alert("Account created!");
-document.getElementById("signupForm").reset();
-document.getElementById("signupFormBox").style.display = "none";
-document.getElementById("loginFormBox").style.display = "block";
-}).catch((error) => {
-alert("Signup failed: " + error.message);
-});
-};
-
-// For testing: create a default account
-async function createBobAccount() {
-try {
-const userCredential = await createUserWithEmailAndPassword(
-auth,
-"bob@mail.com",
-"bobpass"
-);
-
-await updateProfile(userCredential.user, {
-displayName: "bob"
-});
-
-console.log("Bob account created:", userCredential.user);
-} catch (error) {
-console.error("Error creating Bob account:", error.message);
-}
-}
-//bob account function
-createBobAccount();
-</script>
-
-</body>
-</html>
