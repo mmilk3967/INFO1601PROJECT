@@ -7,372 +7,368 @@
 
 <style>
 * {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-font-family: 'Trebuchet MS', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Trebuchet MS', Arial, sans-serif;
 }
 
 html, body {
-width: 100%;
+    /* Changed: Removed height 100% to allow page to grow with content */
+    width: 100%;
 }
 
 body {
-font-size: 20px;
-color: #0C0404;
-transition: background 0.5s ease;
-display: flex;
-flex-direction: column;
-min-height: 100vh;
+    font-size: 20px;
+    color: #0C0404;
+    transition: background 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    /* Added: Ensures the body is at least as tall as the screen */
+    min-height: 100vh;
 }
 
 .home-bg {
-background: url('home page.jpg') no-repeat center center fixed;
-backdrop-filter: blur(0px);
-background-size: cover;
+    background: url('home page.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
 .other-bg {
-background: url('anime-bg.jpg') no-repeat center center fixed;
-backdrop-filter: blur(0px);
-background-size: cover;
+    background: url('anime-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
 nav {
-position: fixed;
-top: 0; left: 0; right: 0;
-z-index: 100;
-display: flex;
-align-items: center;
-padding: 0 48px;
-height: 115px;
-background: rgba(182, 57, 98, 0.75);
-backdrop-filter: blur(18px);
-gap: 40px;
+    position: static;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    padding: 0 48px;
+    height: 115px;
+    background: rgba(182, 57, 98, 0.75);
+    gap: 40px;
 }
 
 .logo {
-display: flex;
-align-items: center;
-gap: 0.75rem;
-margin-left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .logo img {
-width: 135px;
-height: 120px;
+    width: 135px;
+    height: 120px;
 }
 
 .logo h1 {
-font-family: Georgia, serif;
-font-size: 60px;
-padding-left: 20px;
-color: #461220;
-margin-right: 40px;
+    font-family: Georgia, serif;
+    font-size: 60px;
+    padding-left: 20px;
+    color: #461220;
 }
 
 .container {
-margin-top: 115px;
-flex: 1;
-width: 100%;
-padding: 30px;
-background: rgba(0,0,0,0.6);
-backdrop-filter: blur(10px);
-
-display: flex;
-flex-direction: column;
-align-items: center;
+    margin-top: 0;
+    flex: 1; /* This makes the container fill the space between nav and footer */
+    width: 100%;
+    padding: 30px;
+    background: rgba(0,0,0,0.6);
+    /* Changed: Removed overflow-y: auto so the whole page scrolls naturally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 button {
-padding: 8px 12px;
-margin: 5px;
-border: none;
-border-radius: 8px;
-background: #FF486D;
-color: #FED0DB;
-cursor: pointer;
-font-size: 18px;
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    background: #FF486D;
+    color: #FED0DB;
+    cursor: pointer;
+    font-size: 18px;
 }
 
 button:hover {
-background: #b81e1e;
+    background: #b81e1e;
 }
 
 button.active-tab {
-background: #b81e1e;
-border: 2px solid #FED0DB;
+    background: #b81e1e;
+    border: 2px solid #FED0DB;
 }
 
 input, select {
-padding: 10px;
-margin: 10px 5px;
-border-radius: 8px;
-border: none;
+    padding: 10px;
+    margin: 10px 5px;
+    border-radius: 8px;
+    border: none;
 }
 
 #genreFilter {
-background: #FF486D;
-color: #FED0DB;
-font-size: 18px;
-padding: 8px 12px;
-border-radius: 8px;
-border: none;
-cursor: pointer;
+    background: #FF486D;
+    color: #FED0DB;
+    font-size: 18px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
 }
 
 #genreFilter:hover {
-background: #b81e1e;
+    background: #b81e1e;
 }
 
 #searchSection {
-display: flex;
-gap: 15px;
-margin: 30px auto;
-width: 100%;
-max-width: 800px;
-justify-content: center;
-align-items: center;
+    display: flex;
+    gap: 15px;
+    margin: 30px auto;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
+    align-items: center;
 }
 
 #searchSection input {
-padding: 20px 25px;
-font-size: 20px;
-width: 500px;
-border: 2px solid transparent;
-transition: all 0.3s ease;
-background: rgba(255,255,255,0.9);
+    padding: 20px 25px;
+    font-size: 20px;
+    width: 500px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.9);
 }
 
 #searchSection input:hover {
-background: white;
-box-shadow: 0 0 15px rgba(255, 72, 109, 0.5);
-border-color: #FF486D;
-transform: translateY(-2px);
+    background: white;
+    box-shadow: 0 0 15px rgba(255, 72, 109, 0.5);
+    border-color: #FF486D;
+    transform: translateY(-2px);
 }
 
 #searchSection input:focus {
-outline: none;
-background: white;
-box-shadow: 0 0 20px rgba(255, 72, 109, 0.7);
-border-color: #FF486D;
+    outline: none;
+    background: white;
+    box-shadow: 0 0 20px rgba(255, 72, 109, 0.7);
+    border-color: #FF486D;
 }
 
 #searchSection button {
-padding: 20px 40px;
-font-size: 20px;
-white-space: nowrap;
+    padding: 20px 40px;
+    font-size: 20px;
+    white-space: nowrap;
 }
 
 #results {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-gap: 20px;
-width: 100%;
-max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
 }
 
 .card {
-background: rgba(61, 47, 47, 0.1);
-padding: 15px;
-border-radius: 10px;
-text-align: center;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 8px;
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
 .card:hover {
-transform: translateY(-5px);
-box-shadow: 0 8px 20px rgba(255, 72, 109, 0.5);
-transition: all 0.3s ease;
-background: rgba(255,255,255,0.2);
-cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(255, 72, 109, 0.5);
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
 }
 
 .card img {
-width: 160px;
-height: 220px;
-object-fit: cover;
-border-radius: 10px;
-cursor: pointer;
+    width: 160px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 .card h3 {
-color: #FF6D6D;
-font-size: 16px;
-margin-top: 5px;
-cursor: pointer;
+    color: #FF6D6D;
+    font-size: 16px;
+    margin-top: 5px;
+    cursor: pointer;
 }
 
 .card p {
-color: white;
-font-size: 16px;
+    color: white;
+    font-size: 16px;
 }
 
 .card .genres {
-color: #FED0DB;
-font-size: 13px;
-font-style: italic;
+    color: #FED0DB;
+    font-size: 13px;
+    font-style: italic;
 }
 
 .card select {
-background: #FF486D;
-color: #FED0DB;
-font-size: 14px;
-padding: 6px 10px;
-border-radius: 8px;
-border: none;
-cursor: pointer;
-margin-top: 5px;
+    background: #FF486D;
+    color: #FED0DB;
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-top: 5px;
 }
 
 .page-heading {
-color: #FF6D6D;
-font-size: 36px;
-margin-bottom: 20px;
-text-align: center;
+    color: #FF6D6D;
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 #listTabs {
-margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 #loader {
-display: none;
-color: white;
-font-size: 22px;
-margin: 30px auto;
-text-align: center;
+    display: none;
+    color: white;
+    font-size: 22px;
+    margin: 30px auto;
+    text-align: center;
 }
 
 img {
-border-radius: 10px;
+    border-radius: 10px;
 }
 
 h2 {
-text-align: center;
-font-size: 40px;
-color: #FF6D6D;
+    text-align: center;
+    font-size: 40px;
+    color: #FF6D6D;
 }
 
 p {
-text-align: center;
-font-size: 22px;
-color: white;
+    text-align: center;
+    font-size: 22px;
+    color: white;
 }
 
 #loginModal {
-display: none;
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: rgba(0,0,0,0.7);
-justify-content: center;
-align-items: center;
-z-index: 150;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 150;
 }
 
 .modal-box {
-background: white;
-padding: 20px;
-border-radius: 10px;
-width: 300px;
-text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
 }
 
 .search {
-display: inline;
-margin: 0;
-background: transparent;
-border: none;
-border-radius: 0;
-padding: 0;
-width: auto;
-text-align: left;
+    display: inline;
+    margin: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    width: auto;
+    text-align: left;
 }
 
 #animeModal {
-
-display: none;
-position: fixed;
-top: 0; left: 0;
-width: 100%; height: 100%;
-background: rgba(0, 0, 0, 0.8);
-justify-content: center;
-align-items: center;
-z-index: 200;
+    
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
 }
 
 .anime-modal-box {
-background:rgb(236, 152, 166);
-padding: 30px;
-border-radius: 15px;
-width: 500px;
-max-width: 90%;
-max-height: 80vh;
-overflow-y: auto;
-text-align: center;
-position: relative;
-border: 2px solid #FF486D;
+    background:rgb(236, 152, 166);
+    padding: 30px;
+    border-radius: 15px;
+    width: 500px;
+    max-width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    text-align: center;
+    position: relative;
+    border: 2px solid #FF486D;
 }
 
 .anime-modal-box h3 {
-color: #0a0a0a;
-font-size: 26px;
-margin-bottom: 10px;
+    color: #0a0a0a;
+    font-size: 26px;
+    margin-bottom: 10px;
 }
 
 .anime-modal-box img {
-width: 180px;
-border-radius: 10px;
-margin-bottom: 15px;
+    width: 180px;
+    border-radius: 10px;
+    margin-bottom: 15px;
 }
 
 .anime-modal-box p {
-color: rgb(255, 231, 231);
-font-size: 15px;
-margin: 6px 0;
-text-align: left;
+    color: rgb(255, 231, 231);
+    font-size: 15px;
+    margin: 6px 0;
+    text-align: left;
 }
 
 .anime-modal-box .description {
-color: #000000;
-font-size: 14px;
-line-height: 1.6;
-margin-top: 10px;
-text-align: left;
+    color: #000000;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 10px;
+    text-align: left;
 }
 
 .close-modal {
-position: absolute;
-top: 10px; right: 15px;
-background: none;
-border: none;
-color: #FF486D;
-font-size: 28px;
-cursor: pointer;
+    position: absolute;
+    top: 10px; right: 15px;
+    background: none;
+    border: none;
+    color: #FF486D;
+    font-size: 28px;
+    cursor: pointer;
 }
 
 .close-modal:hover {
-color: white;
-background: none;
+    color: white;
+    background: none;
 }
 
 footer {
-background: #b63962bf;
-opacity: 1;
-padding: 30px;
-text-align: center;
-color: #FED0DB;
-font-size: 16px;
-flex-shrink: 0;
-width: 100%;
-box-sizing: border-box;
-margin-top: auto;
+    background: rgba(182, 57, 98, 0.75);
+    padding: 30px;
+    text-align: center;
+    color: #FED0DB;
+    font-size: 16px;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+    /* Added: Pushes footer to bottom if content is short */
+    margin-top: auto; 
 }
 
 .footer-inner {
@@ -436,7 +432,7 @@ color: #FF486D !important;
 
 
 .boop{
-background-color: #301e23;
+    background-color: #301e23;
 
 }
 </style>
@@ -549,16 +545,10 @@ while in use of this website. </p>
 </ul>
 </div>
 
-
-
-</div>
-
-</div>
-
-
 </footer>
 
-<script>
+<script >
+
 let currentPage = "search";
 let currentTab = "Watching";
 
