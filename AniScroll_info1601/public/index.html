@@ -5,370 +5,426 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AniScroll</title>
 
+
 <style>
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Trebuchet MS', Arial, sans-serif;
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Trebuchet MS', Arial, sans-serif;
 }
 
 html, body {
-    /* Changed: Removed height 100% to allow page to grow with content */
-    width: 100%;
+width: 100%;
 }
 
 body {
-    font-size: 20px;
-    color: #0C0404;
-    transition: background 0.5s ease;
-    display: flex;
-    flex-direction: column;
-    /* Added: Ensures the body is at least as tall as the screen */
-    min-height: 100vh;
+font-size: 20px;
+color: #0C0404;
+transition: background 0.5s ease;
+display: flex;
+flex-direction: column;
+min-height: 100vh;
 }
 
 .home-bg {
-    background: url('home page.jpg') no-repeat center center fixed;
-    background-size: cover;
+background: url('home page.jpg') no-repeat center center fixed;
+background-size: cover;
 }
 
 .other-bg {
-    background: url('anime-bg.jpg') no-repeat center center fixed;
-    background-size: cover;
+background: url('anime-bg.jpg') no-repeat center center fixed;
+background-size: cover;
 }
 
 nav {
-    position: static;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    padding: 0 48px;
-    height: 115px;
-    background: rgba(182, 57, 98, 0.75);
-    gap: 40px;
+position: static;
+top: 0; left: 0; right: 0;
+z-index: 100;
+display: flex;
+align-items: center;
+padding: 0 48px;
+height: 115px;
+background: rgba(182, 57, 98, 0.75);
+gap: 40px;
 }
 
 .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+display: flex;
+align-items: center;
+gap: 0.75rem;
 }
 
 .logo img {
-    width: 135px;
-    height: 120px;
+width: 135px;
+height: 120px;
 }
 
 .logo h1 {
-    font-family: Georgia, serif;
-    font-size: 60px;
-    padding-left: 20px;
-    color: #461220;
+font-family: Georgia, serif;
+font-size: 60px;
+padding-left: 20px;
+color: #461220;
 }
 
 .container {
-    margin-top: 0;
-    flex: 1; /* This makes the container fill the space between nav and footer */
-    width: 100%;
-    padding: 30px;
-    background: rgba(0,0,0,0.6);
-    /* Changed: Removed overflow-y: auto so the whole page scrolls naturally */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+margin-top: 0;
+flex: 1;
+width: 100%;
+padding: 30px;
+background: rgba(0,0,0,0.6);
+
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 
 button {
-    padding: 8px 12px;
-    margin: 5px;
-    border: none;
-    border-radius: 8px;
-    background: #FF486D;
-    color: #FED0DB;
-    cursor: pointer;
-    font-size: 18px;
+padding: 8px 12px;
+margin: 5px;
+border: none;
+border-radius: 8px;
+background: #FF486D;
+color: #FED0DB;
+cursor: pointer;
+font-size: 18px;
 }
 
 button:hover {
-    background: #b81e1e;
+background: #b81e1e;
 }
 
 button.active-tab {
-    background: #b81e1e;
-    border: 2px solid #FED0DB;
+background: #b81e1e;
+border: 2px solid #FED0DB;
 }
 
 input, select {
-    padding: 10px;
-    margin: 10px 5px;
-    border-radius: 8px;
-    border: none;
+padding: 10px;
+margin: 10px 5px;
+border-radius: 8px;
+border: none;
 }
 
 #genreFilter {
-    background: #FF486D;
-    color: #FED0DB;
-    font-size: 18px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
+background: #FF486D;
+color: #FED0DB;
+font-size: 18px;
+padding: 8px 12px;
+border-radius: 8px;
+border: none;
+cursor: pointer;
 }
 
 #genreFilter:hover {
-    background: #b81e1e;
+background: #b81e1e;
 }
 
 #searchSection {
-    display: flex;
-    gap: 15px;
-    margin: 30px auto;
-    width: 100%;
-    max-width: 800px;
-    justify-content: center;
-    align-items: center;
+display: flex;
+gap: 15px;
+margin: 30px auto;
+width: 100%;
+max-width: 800px;
+justify-content: center;
+align-items: center;
 }
 
 #searchSection input {
-    padding: 20px 25px;
-    font-size: 20px;
-    width: 500px;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-    background: rgba(255,255,255,0.9);
+padding: 20px 25px;
+font-size: 20px;
+width: 500px;
+border: 2px solid transparent;
+transition: all 0.3s ease;
+background: rgba(255,255,255,0.9);
 }
 
 #searchSection input:hover {
-    background: white;
-    box-shadow: 0 0 15px rgba(255, 72, 109, 0.5);
-    border-color: #FF486D;
-    transform: translateY(-2px);
+background: white;
+box-shadow: 0 0 15px rgba(255, 72, 109, 0.5);
+border-color: #FF486D;
+transform: translateY(-2px);
 }
 
 #searchSection input:focus {
-    outline: none;
-    background: white;
-    box-shadow: 0 0 20px rgba(255, 72, 109, 0.7);
-    border-color: #FF486D;
+outline: none;
+background: white;
+box-shadow: 0 0 20px rgba(255, 72, 109, 0.7);
+border-color: #FF486D;
 }
 
 #searchSection button {
-    padding: 20px 40px;
-    font-size: 20px;
-    white-space: nowrap;
+padding: 20px 40px;
+font-size: 20px;
+white-space: nowrap;
 }
 
 #results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    width: 100%;
-    max-width: 1200px;
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+gap: 20px;
+width: 100%;
+max-width: 1200px;
 }
 
 .card {
-    background: rgba(255,255,255,0.1);
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
+background: rgba(255,255,255,0.1);
+padding: 15px;
+border-radius: 10px;
+text-align: center;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 8px;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(255, 72, 109, 0.5);
-    transition: all 0.3s ease;
-    background: rgba(255,255,255,0.2);
-    cursor: pointer;
+transform: translateY(-5px);
+box-shadow: 0 8px 20px rgba(255, 72, 109, 0.5);
+transition: all 0.3s ease;
+background: rgba(255,255,255,0.2);
+cursor: pointer;
 }
 
 .card img {
-    width: 160px;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 10px;
-    cursor: pointer;
+width: 160px;
+height: 220px;
+object-fit: cover;
+border-radius: 10px;
+cursor: pointer;
 }
 
 .card h3 {
-    color: #FF6D6D;
-    font-size: 16px;
-    margin-top: 5px;
-    cursor: pointer;
+color: #FF6D6D;
+font-size: 16px;
+margin-top: 5px;
+cursor: pointer;
 }
 
 .card p {
-    color: white;
-    font-size: 16px;
+color: white;
+font-size: 16px;
 }
 
 .card .genres {
-    color: #FED0DB;
-    font-size: 13px;
-    font-style: italic;
+color: #FED0DB;
+font-size: 13px;
+font-style: italic;
 }
 
 .card select {
-    background: #FF486D;
-    color: #FED0DB;
-    font-size: 14px;
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    margin-top: 5px;
+background: #FF486D;
+color: #FED0DB;
+font-size: 14px;
+padding: 6px 10px;
+border-radius: 8px;
+border: none;
+cursor: pointer;
+margin-top: 5px;
 }
 
 .page-heading {
-    color: #FF6D6D;
-    font-size: 36px;
-    margin-bottom: 20px;
-    text-align: center;
+color: #FF6D6D;
+font-size: 36px;
+margin-bottom: 20px;
+text-align: center;
 }
 
 #listTabs {
-    margin-bottom: 20px;
+margin-bottom: 20px;
 }
 
 #loader {
-    display: none;
-    color: white;
-    font-size: 22px;
-    margin: 30px auto;
-    text-align: center;
+display: none;
+color: white;
+font-size: 22px;
+margin: 30px auto;
+text-align: center;
 }
 
 img {
-    border-radius: 10px;
+border-radius: 10px;
 }
 
 h2 {
-    text-align: center;
-    font-size: 40px;
-    color: #FF6D6D;
+text-align: center;
+font-size: 40px;
+color: #FF6D6D;
 }
 
 p {
-    text-align: center;
-    font-size: 22px;
-    color: white;
+text-align: center;
+font-size: 22px;
+color: white;
 }
 
 #loginModal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    justify-content: center;
-    align-items: center;
-    z-index: 150;
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.7);
+justify-content: center;
+align-items: center;
+z-index: 150;
 }
 
 .modal-box {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
+background: white;
+padding: 20px;
+border-radius: 10px;
+width: 300px;
+text-align: center;
 }
 
 .search {
-    display: inline;
-    margin: 0;
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    width: auto;
-    text-align: left;
+display: inline;
+margin: 0;
+background: transparent;
+border: none;
+border-radius: 0;
+padding: 0;
+width: auto;
+text-align: left;
 }
 
 #animeModal {
-    
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
-    z-index: 200;
+display: none;
+position: fixed;
+top: 0; left: 0;
+width: 100%; height: 100%;
+background: rgba(0, 0, 0, 0.8);
+justify-content: center;
+align-items: center;
+z-index: 200;
 }
 
 .anime-modal-box {
-    background:rgb(236, 152, 166);
-    padding: 30px;
-    border-radius: 15px;
-    width: 500px;
-    max-width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    text-align: center;
-    position: relative;
-    border: 2px solid #FF486D;
+background:rgb(236, 152, 166);
+padding: 30px;
+border-radius: 15px;
+width: 500px;
+max-width: 90%;
+max-height: 80vh;
+overflow-y: auto;
+text-align: center;
+position: relative;
+border: 2px solid #FF486D;
 }
 
 .anime-modal-box h3 {
-    color: #0a0a0a;
-    font-size: 26px;
-    margin-bottom: 10px;
+color: #0a0a0a;
+font-size: 26px;
+margin-bottom: 10px;
 }
 
 .anime-modal-box img {
-    width: 180px;
-    border-radius: 10px;
-    margin-bottom: 15px;
+width: 180px;
+border-radius: 10px;
+margin-bottom: 15px;
 }
 
 .anime-modal-box p {
-    color: rgb(255, 231, 231);
-    font-size: 15px;
-    margin: 6px 0;
-    text-align: left;
+color: rgb(255, 231, 231);
+font-size: 15px;
+margin: 6px 0;
+text-align: left;
 }
 
 .anime-modal-box .description {
-    color: #000000;
-    font-size: 14px;
-    line-height: 1.6;
-    margin-top: 10px;
-    text-align: left;
+color: #000000;
+font-size: 14px;
+line-height: 1.6;
+margin-top: 10px;
+text-align: left;
 }
 
 .close-modal {
-    position: absolute;
-    top: 10px; right: 15px;
-    background: none;
-    border: none;
-    color: #FF486D;
-    font-size: 28px;
-    cursor: pointer;
+position: absolute;
+top: 10px; right: 15px;
+background: none;
+border: none;
+color: #FF486D;
+font-size: 28px;
+cursor: pointer;
 }
 
 .close-modal:hover {
-    color: white;
-    background: none;
+color: white;
+background: none;
+}
+
+#pagination {
+display: none;
+width: 100%;
+padding: 20px 0;
+justify-content: center;
+align-items: center;
+gap: 10px;
+}
+
+/* ===== TERMS PAGE ===== */
+.terms-view {
+display: none; /* default hidden */
+padding: 40px;
+width: 100%;
+justify-content: center;
+align-items: center;
+}
+
+.terms-card {
+width: 100%;
+max-width: 900px;
+margin: auto;
+
+max-height: 75vh;
+overflow-y: auto;
+
+background: rgba(255, 72, 109, 0.15);
+border: 1px solid rgba(255, 72, 109, 0.4);
+border-radius: 16px;
+
+padding: 25px 30px;
+color: white;
+}
+
+.terms-intro {
+text-align: center;
+margin-bottom: 25px;
+}
+
+.terms-content {
+display: flex;
+flex-direction: column;
+gap: 18px;
+}
+
+.terms-content h3 {
+color: #FF486D;
+margin-bottom: 5px;
+text-align: center
+}
+
+.terms-content p {
+font-size: 16px;
+line-height: 1.6;
+text-align: center;
 }
 
 footer {
-    background: rgba(182, 57, 98, 0.75);
-    padding: 30px;
-    text-align: center;
-    color: #FED0DB;
-    font-size: 16px;
-    flex-shrink: 0;
-    width: 100%;
-    box-sizing: border-box;
-    /* Added: Pushes footer to bottom if content is short */
-    margin-top: auto; 
+background: rgba(182, 57, 98, 0.75);
+padding: 30px;
+text-align: center;
+color: #FED0DB;
+font-size: 16px;
+flex-shrink: 0;
+width: 100%;
+box-sizing: border-box;
+
+margin-top: auto;
 }
 
 .footer-inner {
@@ -398,7 +454,6 @@ padding-bottom: 0;
 margin-bottom: 14px;
 }
 
-
 .footer-heading {
 font-family: "Palatino Linotype", serif;
 font-style: italic;
@@ -425,14 +480,12 @@ text-align: left;
 padding: 0;
 }
 
-
 .footer-email {
 color: #FF486D !important;
 }
 
-
 .boop{
-    background-color: #301e23;
+background-color: #301e23;
 
 }
 </style>
@@ -446,6 +499,7 @@ color: #FF486D !important;
 <h1>AniScroll</h1>
 </div>
 
+
 <div style="display:flex; align-items:center; flex-wrap:nowrap; gap:10px;">
 <button onclick="switchPage('search')">Home</button>
 <button onclick="switchPage('bookmarks')">Bookmarks</button>
@@ -455,13 +509,17 @@ color: #FF486D !important;
 </select>
 </div>
 
+
 <button id="authButton" class="boop">Login</button>
+<span id="user" style="color:white;"></span>
 </nav>
+
 
 <div class="container">
 
 <h2>Welcome to AniScroll</h2>
 <p>Your Anime Update</p>
+
 
 <div id="searchSection">
 <input type="text" class="search" id="search" placeholder="Search Anime...">
@@ -472,32 +530,162 @@ color: #FF486D !important;
 
 <div id="pageHeading" class="page-heading" style="display:none;"></div>
 
+
 <div id="listTabs" style="display:none;">
-<button id="tab-Watching" onclick="switchTab('Watching')">Watching</button>
-<button id="tab-To Watch" onclick="switchTab('To Watch')">To Watch</button>
-<button id="tab-Completed" onclick="switchTab('Completed')">Completed</button>
+<button id="tab-watching" onclick="switchTab('watching')">Watching</button>
+<button id="tab-to_watch" onclick="switchTab('to_watch')">To Watch</button>
+<button id="tab-completed" onclick="switchTab('completed')">Completed</button>
 </div>
+
 
 <div id="results"></div>
 
+
+<!-- TERMS -->
+<div id="termsView" class="terms-view">
+
+<div class="terms-card">
+
+<p class="terms-intro">
+
+By using AniScroll, you agree to the following Terms and Conditions.
+
+Please read them carefully.
+
+</p>
+
+<div class="terms-content">
+
+
+<div>
+<h3>1. Terms</h3>
+<p>By accessing AniScroll, you agree to be bound by these Terms. If you do not agree, stop using the site.</p>
 </div>
+
+<div>
+<h3>2. Use License</h3>
+<p>You are granted permission to use this Website for personal, non-commercial use only.
+No copying, modifying, or redistributing content.
+</p>
+</div>
+
+<div>
+<h3>3. Disclaimer</h3>
+<p>Content is provided “as is” without warranties of accuracy or reliability.</p>
+</div>
+
+<div>
+<h3>4. Limitations</h3>
+<p>AniScroll is not responsible for any damages resulting from use or inability to use the Website.</p>
+</div>
+
+<div>
+<h3>5. Updates</h3>
+<p>Terms may change at any time without notice.</p>
+</div>
+
+<div>
+<h3>6. Privacy</h3>
+<p>Please refer to the Privacy Policy for details on how data is handled.</p>
+</div>
+
+
+</div>
+</div>
+</div>
+
+
+<!-- PRIVACY -->
+<div id="privacyView" class="terms-view">
+
+<div class="terms-card">
+
+<p class="terms-intro">
+This Privacy Policy explains how AniScroll collects, uses, and protects your information.
+</p>
+
+
+<div class="terms-content">
+
+<div>
+<h3>1. Data Collection</h3>
+<p>When you create an account, AniScroll collects your email address and login credentials
+through Firebase Authentication. We do not collect unnecessary personal information.</p>
+</div>
+
+<div>
+<h3>2. Security</h3>
+<p>Passwords are encrypted
+and are not visible or accessible to us.</p>
+</div>
+
+<div>
+<h3>3. Local Storage</h3>
+<p>AniScroll may store certain data such as bookmarks and anime lists either locally in your browser
+or in a database for your convenience and user experience.</p>
+</div>
+
+<div>
+<h3>4. Third Party Services</h3>
+<p> AniScroll uses third-party services including Firebase for authentication and AniList API
+for anime data. These services may process limited data necessary for functionality.</p>
+</div>
+
+<div>
+<h3>5. How We Use Your Data</h3>
+<p>
+Your data is used only to provide core features such as account access, saving preferences,
+and improving your experience on the website.
+</p>
+</div>
+
+<div>
+<h3>6. Changes to This Policy</h3>
+<p>
+AniScroll may update this Privacy Policy at any time. Continued use of the website
+indicates acceptance of any changes.
+</p>
+</div>
+
+<div>
+<h3>7. Contact</h3>
+<p>
+For any questions regarding this Privacy Policy, please contact us using the details
+provided in the website footer.
+</p>
+</div>
+
+</div>
+</div>
+
+</div>
+
+
+<div id="pagination" style="display:none; text-align:center; margin: 20px;">
+<button onclick="changePage(-1)">⬅ Previous</button>
+<span id="pageNumber" style="color:white; margin:0 10px;"></span>
+<button onclick="changePage(1)">Next ➡</button>
+</div>
+</div>
+
 
 <div id="loginModal">
 <div class="modal-box">
 <div id="loginFormBox">
 <h2>Login</h2>
 <form id="loginForm">
-<input type="text" id="loginUsername" placeholder="Username" required>
+<input type="text" id="loginEmail" placeholder="Email" required>
 <input type="password" id="loginPassword" placeholder="Password" required>
 <button type="submit">Login</button>
 </form>
 <p>Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
 </div>
 
+
 <div id="signupFormBox" style="display:none;">
 <h2>Sign Up</h2>
 <form id="signupForm">
-<input type="text" id="signupUsername" placeholder="Username" required>
+<input type="text" id="signupEmail" placeholder="Email" required>
 <input type="password" id="signupPassword" placeholder="Password" required>
 <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
 <button type="submit">Sign Up</button>
@@ -505,9 +693,11 @@ color: #FF486D !important;
 <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
 </div>
 
-<button onclick="closeLogin()">Close</button>
+
+<button onclick="closeAuthModal()">Close</button>
 </div>
 </div>
+
 
 <div id="animeModal">
 <div class="anime-modal-box">
@@ -516,13 +706,16 @@ color: #FF486D !important;
 </div>
 </div>
 
+
 <footer>
-<p>&copy; 2024 AniScroll. All rights reserved. | <a href="#" style="color:#FED0DB;">Terms</a> | <a href="#" style="color:#FED0DB;">Privacy</a></p>
+<p>&copy; 2024 AniScroll. All rights reserved. | <a href="#" onclick="switchPage('terms')" style="color:#FED0DB;">Terms</a> | <a href="#" onclick="switchPage('privacy')" style="color:#FED0DB;">Privacy</a></p>
 <p> Your Anime Update </p>
 
 <br></br>
 
+
 <div class="footer-inner">
+
 
 <div class="footer-col footer-about">
 <div class="footer-logo-text">About Us</div>
@@ -534,6 +727,7 @@ while in use of this website. </p>
 </div>
 
 <div></div>
+
 
 <div class="footer-col">
 <h4 class="footer-heading">Contact</h4>
@@ -547,66 +741,163 @@ while in use of this website. </p>
 
 </footer>
 
-<script >
 
+<script type="module">
+window.lastRenderedList = [];
+
+const searchSection = document.getElementById("searchSection");
+const listTabs = document.getElementById("listTabs");
+const results = document.getElementById("results");
+
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut,
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+
+/* ---------------- FIREBASE SETUP ---------------- */
+const firebaseConfig = {
+apiKey: "AIzaSyA6MganRG6UW-Bydp78cOGS7owenEWksRE",
+authDomain: "ani-scroll.firebaseapp.com",
+projectId: "ani-scroll",
+storageBucket: "ani-scroll.firebasestorage.app",
+messagingSenderId: "229551996095",
+appId: "1:229551996095:web:dc42aec18a65bcea841a0a"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+
+/* ---------------- STATE ---------------- */
+
+let currentApiPage = 1;
+let lastQuery = "";
+let lastGenre = "";
+let currentMode = "all";
+
+
+let currentTab = "watching";
 let currentPage = "search";
-let currentTab = "Watching";
 
 const authBtn = document.getElementById("authButton");
 
-authBtn.addEventListener("click", function () {
-let user = localStorage.getItem("user");
+
+/* ---------------- AUTH UI ---------------- */
+onAuthStateChanged(auth, (user) => {
+window.currentUser = user;
+
+
 if (user) {
-localStorage.removeItem("user");
+authBtn.textContent = "Logout";
+} else {
 authBtn.textContent = "Login";
+}
+});
+
+
+authBtn.addEventListener("click", async () => {
+if (auth.currentUser) {
+await signOut(auth);
 alert("Logged out");
 } else {
-openLogin();
+openAuthModal(); // authorization
 }
 });
 
-document.getElementById("search").addEventListener("keypress", function(e) {
-if (e.key === "Enter") getAnime();
-});
 
-function isLoggedIn() {
-return localStorage.getItem("user") !== null;
+async function login(email, password) {
+try {
+await signInWithEmailAndPassword(auth, email, password);
+alert("Logged in!");
+} catch (err) {
+alert(err.message);
+}
 }
 
-function openLogin() {
+
+async function signup(email, password) {
+try {
+await createUserWithEmailAndPassword(auth, email, password);
+alert("Account created!");
+} catch (err) {
+alert(err.message);
+}
+}
+
+//log in form
+const loginForm = document.getElementById("loginForm");
+if (loginForm) {
+loginForm.addEventListener("submit", (e) => {
+e.preventDefault();
+login(
+document.getElementById("loginEmail").value,
+document.getElementById("loginPassword").value
+);
+});
+}
+
+
+document.getElementById("signupForm").addEventListener("submit", (e) => {
+e.preventDefault();
+signup(
+document.getElementById("signupEmail").value,
+document.getElementById("signupPassword").value
+);
+});
+
+
+//authorization
+function openAuthModal() {
 document.getElementById("loginModal").style.display = "flex";
 }
 
-function closeLogin() {
+
+function closeAuthModal() {
 document.getElementById("loginModal").style.display = "none";
 }
 
+//login/signup
 function showSignup() {
-loginFormBox.style.display = "none";
-signupFormBox.style.display = "block";
+document.getElementById("loginFormBox").style.display = "none";
+document.getElementById("signupFormBox").style.display = "block";
 }
 
 function showLogin() {
-signupFormBox.style.display = "none";
-loginFormBox.style.display = "block";
+document.getElementById("loginFormBox").style.display = "block";
+document.getElementById("signupFormBox").style.display = "none";
 }
 
+/* ---------------- SEARCH ---------------- */
+document.getElementById("search").addEventListener("keypress", (e) => {
+if (e.key === "Enter") getAnime();
+});
+
+/* ---------------- LOADER ---------------- */
 function showLoader() {
 document.getElementById("loader").style.display = "block";
 document.getElementById("results").innerHTML = "";
 }
 
+
 function hideLoader() {
 document.getElementById("loader").style.display = "none";
 }
 
+/* ---------------- ANIME MODAL ---------------- */
 function openAnimeModal(id) {
 document.getElementById("animeModal").style.display = "flex";
-document.getElementById("animeModalContent").innerHTML = "<p style='color:white; text-align:center;'>Loading...</p>";
+document.getElementById("animeModalContent").innerHTML =
+"<p style='color:white;text-align:center;'>Loading...</p>";
 
 fetch("https://graphql.anilist.co", {
 method: "POST",
-headers: {"Content-Type": "application/json"},
+headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
 query: `
 query ($id: Int) {
@@ -620,105 +911,161 @@ description(asHtml: false)
 coverImage { large }
 }
 }`,
-variables: { id: id }
+variables: { id }
+
 })
 })
 .then(res => res.json())
 .then(data => {
 const a = data.data.Media;
-const desc = a.description ? a.description.replace(/<[^>]+>/g, '').slice(0, 300) + "..." : "No description available.";
+const desc = a.description
+? a.description.replace(/<[^>]+>/g, "").slice(0, 300) + "..."
+: "No description available.";
+
+
+
 document.getElementById("animeModalContent").innerHTML = `
 <img src="${a.coverImage.large}">
 <h3>${a.title.romaji}</h3>
-${a.title.english ? `<p style="color:#FED0DB; text-align:center;">English: ${a.title.english}</p>` : ''}
-<p>⭐ Score: ${a.averageScore || "N/A"}</p>
-<p>📺 Episodes: ${a.episodes || "N/A"}</p>
-<p>📌 Status: ${a.status || "N/A"}</p>
-<p>🎭 Genres: ${a.genres ? a.genres.join(', ') : "N/A"}</p>
+${a.title.english ? `<p>${a.title.english}</p>` : ""}
+<p>⭐ ${a.averageScore || "N/A"}</p>
+<p>📺 ${a.episodes || "N/A"}</p>
+<p>📌 ${a.status || "N/A"}</p>
+<p>🎭 ${a.genres?.join(", ") || "N/A"}</p>
 <p class="description">${desc}</p>
 `;
 });
+
 }
 
 function closeAnimeModal() {
 document.getElementById("animeModal").style.display = "none";
 }
 
+
+/* ---------------- PAGE SYSTEM ---------------- */
 function switchPage(page) {
 currentPage = page;
-searchSection.style.display = page === "search" ? "flex" : "none";
-listTabs.style.display = page === "mylist" ? "block" : "none";
 
+// elements
+const searchSection = document.getElementById("searchSection");
+const listTabs = document.getElementById("listTabs");
+const results = document.getElementById("results");
+const pagination = document.getElementById("pagination");
+const terms = document.getElementById("termsView");
+const privacy = document.getElementById("privacyView");
 const heading = document.getElementById("pageHeading");
-if (page === "bookmarks") {
+
+// RESET ALL
+
+searchSection.style.display = "none";
+listTabs.style.display = "none";
+results.style.display = "none";
+pagination.style.display = "none";
+terms.style.display = "none";
+privacy.style.display = "none";
+heading.style.display = "none";
+
+// PAGE ROUTING
+if (page === "search") {
+searchSection.style.display = "flex";
+results.style.display = "grid";
+heading.style.display = "none";
+render();
+}
+
+else if (page === "bookmarks") {
 heading.textContent = "My Bookmarks";
 heading.style.display = "block";
-} else if (page === "mylist") {
+results.style.display = "grid";
+render();
+}
+
+else if (page === "mylist") {
 heading.textContent = "My Lists";
 heading.style.display = "block";
-} else {
-heading.style.display = "none";
+listTabs.style.display = "block";
+results.style.display = "grid";
+
+currentTab = "watching";
+
+// force fresh load from storage
+setTimeout(() => {
+loadList();
+}, 0);
 }
 
-if (page !== "search") {
-document.getElementById("genreFilter").value = "";
+
+else if (page === "terms") {
+heading.textContent = "Terms & Conditions";
+heading.style.display = "block";
+terms.style.display = "flex";
 }
+
+else if (page === "privacy") {
+heading.textContent = "Privacy Policy";
+heading.style.display = "block";
+privacy.style.display = "flex";
+}
+
+// background swap
 
 document.body.classList.remove("home-bg", "other-bg");
-if (page === "search") {
-document.body.classList.add("home-bg");
-} else {
-document.body.classList.add("other-bg");
-}
-render();
+document.body.classList.add(page === "search" ? "home-bg" : "other-bg");
 }
 
-function switchTab(tab) {
-currentTab = tab;
-document.querySelectorAll("#listTabs button").forEach(btn => btn.classList.remove("active-tab"));
-document.getElementById("tab-" + tab).classList.add("active-tab");
-render();
-}
-
+/* ---------------- RENDER ---------------- */
 function render() {
 if (currentPage === "search") getAllAnime();
 else if (currentPage === "bookmarks") loadBookmarks();
-else loadList();
+else if (currentPage === "mylist") loadList();
 }
 
+/* ---------------- GENRES ---------------- */
 function populateGenreFilter() {
-const genres = ['Action','Romance','Comedy','Fantasy','Sci-Fi','Horror','Slice of Life','Sports','Mystery','Thriller','Supernatural','Adventure'];
-const filter = document.getElementById('genreFilter');
+const genres = [
+"Action","Romance","Comedy","Fantasy","Sci-Fi","Horror",
+"Slice of Life","Sports","Mystery","Thriller","Supernatural","Adventure"
+];
+
+
+const filter = document.getElementById("genreFilter");
 filter.innerHTML = '<option value="">All Genres</option>';
-genres.forEach(genre => {
-const option = document.createElement('option');
-option.value = genre;
-option.textContent = genre;
-filter.appendChild(option);
+
+genres.forEach(g => {
+const opt = document.createElement("option");
+opt.value = g;
+opt.textContent = g;
+filter.appendChild(opt);
 });
 }
 
-document.getElementById('genreFilter').addEventListener('change', function() {
+document.getElementById("genreFilter").addEventListener("change", function () {
 const genre = this.value;
-if (currentPage !== "search") switchPage("search");
-if (genre) {
-getAnimeByGenre(genre);
-} else {
-getAllAnime();
-}
+if (genre) getAnimeByGenre(genre);
+else getAllAnime();
 });
 
-function getAnime() {
-let query = document.getElementById("search").value;
+
+/* ---------------- ANIME API ---------------- */
+function getAnime(reset = true) {
+const query = document.getElementById("search").value;
 if (!query) return;
+
+lastQuery = query;
+currentMode = "search";
+
+if (reset) currentApiPage = 1;
+
 showLoader();
+
 fetch("https://graphql.anilist.co", {
 method: "POST",
-headers: {"Content-Type": "application/json"},
+headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
 query: `
 query ($search: String) {
-Page(page: 1, perPage: 10) {
+Page(page: ${currentApiPage}, perPage: 10) {
 media(search: $search, type: ANIME) {
 id
 title { romaji }
@@ -727,6 +1074,7 @@ coverImage { large }
 genres
 }
 }
+
 }`,
 variables: { search: query }
 })
@@ -734,28 +1082,23 @@ variables: { search: query }
 .then(res => res.json())
 .then(data => {
 hideLoader();
-const results = data.data.Page.media;
-if (results.length === 0) {
-document.getElementById("results").innerHTML = "<p>No results found!</p>";
-} else {
-displayAnime(results);
-}
-})
-.catch(() => {
-hideLoader();
-document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+displayAnime(data.data.Page.media);
+updatePagination();
 });
 }
 
 function getAllAnime() {
+currentMode = "all";
+
 showLoader();
+
 fetch("https://graphql.anilist.co", {
 method: "POST",
-headers: {"Content-Type": "application/json"},
+headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
 query: `
 {
-Page(page: 1, perPage: 15) {
+Page(page: ${currentApiPage}, perPage: 15) {
 media(type: ANIME, sort: SCORE_DESC) {
 id
 title { romaji }
@@ -771,22 +1114,24 @@ genres
 .then(data => {
 hideLoader();
 displayAnime(data.data.Page.media);
-})
-.catch(() => {
-hideLoader();
-document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+updatePagination(); // 🔥 ADD THIS
 });
 }
 
-function getAnimeByGenre(genre) {
+//genre
+function getAnimeByGenre(genre, reset = true ) {
+currentMode = "genre";
+lastGenre = genre;
+if (reset) currentApiPage = 1;
 showLoader();
+
 fetch("https://graphql.anilist.co", {
 method: "POST",
-headers: {"Content-Type": "application/json"},
+headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
 query: `
 query ($genre: String) {
-Page(page: 1, perPage: 15) {
+Page(page: ${currentApiPage}, perPage: 15) {
 media(type: ANIME, genre_in: [$genre], sort: SCORE_DESC) {
 id
 title { romaji }
@@ -796,176 +1141,307 @@ genres
 }
 }
 }`,
-variables: { genre: genre }
+variables: { genre }
 })
 })
 .then(res => res.json())
 .then(data => {
 hideLoader();
-if (data.errors) {
-document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
-return;
-}
-const results = data.data.Page.media;
-if (results.length === 0) {
-document.getElementById("results").innerHTML = "<p>No results found!</p>";
-} else {
-displayAnime(results);
-}
-})
-.catch(() => {
-hideLoader();
-document.getElementById("results").innerHTML = "<p>Error fetching results. Try again!</p>";
+displayAnime(data.data.Page.media);
+updatePagination();
 });
 }
 
+
+/* ---------------- DISPLAY ---------------- */
 function displayAnime(list) {
-let container = document.getElementById("results");
+const container = document.getElementById("results");
+
+if (!list || list.length === 0) {
+container.innerHTML = "<p>No anime found.</p>";
+return;
+}
+
 container.innerHTML = "";
+
+window.lastRenderedList = list;
+
 list.forEach(anime => {
-let div = document.createElement("div");
+const div = document.createElement("div");
 div.className = "card";
+
+let extraButtons = "";
+
+
+// SEARCH PAGE
+if (currentPage === "search") {
+extraButtons = `
+<button onclick="bookmarkAnime(${anime.id})">Bookmark</button>
+`;
+}
+
+
+// BOOKMARKS PAGE 
+else if (currentPage === "bookmarks") {
+extraButtons = `
+<button onclick="removeBookmark(${anime.id})">Remove</button>
+
+
+<select onchange="moveToList(${anime.id}, this.value)">
+<option value="">Add to List</option>
+<option value="watching">Watching</option>
+<option value="to_watch">To Watch</option>
+<option value="completed">Completed</option>
+</select>
+`;
+}
+
+
+// MY LIST PAGE
+else if (currentPage === "mylist") {
+extraButtons = `
+<button onclick="removeFromList(${anime.id})">Remove</button>
+`;
+}
+
+
 div.innerHTML = `
 <img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
 <h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
 <p>Score: ${anime.averageScore || "N/A"}</p>
 <p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
-<button onclick='bookmarkAnime(${JSON.stringify(anime)})'>Bookmark</button>
+${extraButtons}
 `;
+
 container.appendChild(div);
 });
 }
 
-function bookmarkAnime(anime) {
-if (!isLoggedIn()) {
-alert("Login first!");
-openLogin();
+
+/* ---------------- BOOKMARKS ---------------- */
+function bookmarkAnime(id) {
+// IF NOT LOGGED IN
+if (!auth.currentUser) {
+alert("You must be logged in to bookmark anime!");
+openAuthModal();
 return;
 }
+
 let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
-if (!bookmarks.some(a => a.id === anime.id)) {
+
+if (!bookmarks.some(a => a.id === id)) {
+const anime = window.lastRenderedList.find(a => a.id === id);
+if (!anime) return;
+
 bookmarks.push(anime);
 localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
 alert("Bookmarked!");
-} else {
-alert("Already bookmarked!");
 }
 }
 
-function loadBookmarks() {
-let container = document.getElementById("results");
+
+/* ---------------- LISTS ---------------- */
+async function loadBookmarks() {
+const container = document.getElementById("results");
 container.innerHTML = "";
+
 let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+
 if (bookmarks.length === 0) {
 container.innerHTML = "<p>No bookmarks yet!</p>";
 return;
 }
-bookmarks.forEach(anime => {
-let div = document.createElement("div");
-div.className = "card";
-div.innerHTML = `
-<img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
-<h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
-<p>Score: ${anime.averageScore || "N/A"}</p>
-<p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
-<button onclick='removeBookmark(${anime.id})'>Remove</button>
-<select onchange='moveToList(${anime.id}, this.value)'>
-<option value="">Add to List</option>
-<option value="Watching">Watching</option>
-<option value="To Watch">To Watch</option>
-<option value="Completed">Completed</option>
-</select>
-`;
-container.appendChild(div);
-});
+
+window.lastRenderedList = bookmarks;
+displayAnime(bookmarks);
 }
 
+
+// remove bookmarks
 function removeBookmark(id) {
+
 let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
 bookmarks = bookmarks.filter(a => a.id !== id);
 localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+
+// Remove from all lists too
+["watching", "to_watch", "completed"].forEach(key => {
+let list = JSON.parse(localStorage.getItem(key)) || [];
+list = list.filter(a => a.id !== id);
+localStorage.setItem(key, JSON.stringify(list));
+});
+
 loadBookmarks();
 }
 
+
+//move to list
 function moveToList(id, listName) {
-if (!listName) return;
-let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
-let anime = bookmarks.find(a => a.id === id);
-if (!anime) return;
-let list = JSON.parse(localStorage.getItem(listName)) || [];
-if (!list.some(a => a.id === id)) {
-list.push(anime);
-localStorage.setItem(listName, JSON.stringify(list));
-alert(`Added to ${listName}!`);
-}
+if (!auth.currentUser) {
+alert("You must be logged in first!");
+openAuthModal();
+return;
 }
 
-function loadList() {
-let container = document.getElementById("results");
+if (!listName) return;
+
+["watching", "to_watch", "completed"].forEach(key => {
+let list = JSON.parse(localStorage.getItem(key)) || [];
+list = list.filter(a => a.id !== id);
+localStorage.setItem(key, JSON.stringify(list));
+});
+
+let newList = JSON.parse(localStorage.getItem(listName)) || [];
+if (!newList.some(a => a.id === id)) {
+newList.push({ id });
+localStorage.setItem(listName, JSON.stringify(newList));
+alert("Added to " + listName + "!");
+}
+
+loadBookmarks();
+}
+
+//list
+async function loadList() {
+const container = document.getElementById("results");
 container.innerHTML = "";
-document.querySelectorAll("#listTabs button").forEach(btn => btn.classList.remove("active-tab"));
+
+
+document.querySelectorAll("#listTabs button")
+.forEach(btn => btn.classList.remove("active-tab"));
+
+
 const activeBtn = document.getElementById("tab-" + currentTab);
 if (activeBtn) activeBtn.classList.add("active-tab");
 
-let list = JSON.parse(localStorage.getItem(currentTab)) || [];
-if (list.length === 0) {
-container.innerHTML = `<p>No anime in ${currentTab} yet!</p>`;
+
+const saved = JSON.parse(localStorage.getItem(currentTab)) || [];
+
+
+if (saved.length === 0) {
+container.innerHTML = `<p>No anime in ${currentTab.replace("_", " ")} yet!</p>`;
 return;
 }
-list.forEach(anime => {
-let div = document.createElement("div");
-div.className = "card";
-div.innerHTML = `
-<img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
-<h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
-<p>Score: ${anime.averageScore || "N/A"}</p>
-<p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
-<button onclick='removeFromList(${anime.id})'>Remove</button>
-`;
-container.appendChild(div);
+
+const ids = saved.map(a => a.id);
+
+const res = await fetch("https://graphql.anilist.co", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+query: `
+query ($ids: [Int]) {
+Page(page: 1, perPage: 50) {
+media(id_in: $ids, type: ANIME) {
+id
+title { romaji }
+averageScore
+coverImage { large }
+genres
+}
+}
+}`,
+variables: { ids }
+})
 });
+
+
+const data = await res.json();
+displayAnime(data.data.Page.media);
 }
 
-function removeFromList(id) {
-let list = JSON.parse(localStorage.getItem(currentTab)) || [];
-list = list.filter(a => a.id !== id);
-localStorage.setItem(currentTab, JSON.stringify(list));
+
+//switchtab
+function switchTab(tab) {
+currentTab = tab.trim(); // IMPORTANT FIX
 loadList();
 }
 
-loginForm.addEventListener("submit", function(e){
-e.preventDefault();
-let u = loginUsername.value;
-let p = loginPassword.value;
-let users = JSON.parse(localStorage.getItem("users")) || {};
-if (!users[u] || users[u] !== p) {
-alert("Invalid login");
+
+// remove list
+function removeFromList(id) {
+const key = currentTab;
+
+let list = JSON.parse(localStorage.getItem(key)) || [];
+
+list = list.filter(a => a.id !== id);
+
+localStorage.setItem(key, JSON.stringify(list));
+
+loadList();
+}
+
+
+// pagination
+function updatePagination() {
+const pagination = document.getElementById("pagination");
+
+// Hide for non-search pages
+if (currentPage !== "search") {
+pagination.style.display = "none";
 return;
 }
 
-localStorage.setItem("user", u);
-authBtn.textContent = "Logout";
-closeLogin();
-alert("Welcome " + u);
-});
-
-signupForm.addEventListener("submit", function(e){
-e.preventDefault();
-if (signupPassword.value !== confirmPassword.value) {
-alert("Passwords don't match");
+// Hide for genre
+if (currentMode === "genre") {
+pagination.style.display = "none";
 return;
 }
-let users = JSON.parse(localStorage.getItem("users")) || {};
-users[signupUsername.value] = signupPassword.value;
-localStorage.setItem("users", JSON.stringify(users));
-alert("Account created!");
-showLogin();
-});
 
-window.onload = function() {
+pagination.style.display = "flex";
+document.getElementById("pageNumber").textContent = "Page " + currentApiPage;
+
+}
+
+//changepage
+function changePage(direction) {
+currentApiPage += direction;
+if (currentApiPage < 1) currentApiPage = 1;
+
+showLoader();
+
+if (currentMode === "search") {
+getAnime(false);
+}
+else if (currentMode === "genre") {
+getAnimeByGenre(lastGenre, false);
+}
+else {
+getAllAnime();
+}
+
+window.scrollTo({
+top: 0,
+behavior: "smooth"
+});
+}
+
+
+/* ---------------- INIT ---------------- */
+window.onload = function () {
 populateGenreFilter();
 switchPage("search");
 };
+
+/* expose functions */
+window.switchPage = switchPage;
+window.openAnimeModal = openAnimeModal;
+window.closeAnimeModal = closeAnimeModal;
+window.bookmarkAnime = bookmarkAnime;
+
+window.openAuthModal = openAuthModal;
+window.closeAuthModal = closeAuthModal;
+window.showSignup = showSignup;
+window.showLogin = showLogin;
+
+window.changePage = changePage;
+window.getAnimeByGenre = getAnimeByGenre;
+window.getAnime = getAnime;
+window.getAllAnime = getAllAnime;
+window.switchTab = switchTab;
+window.removeFromList = removeFromList;
+window.removeBookmark = removeBookmark;
+window.moveToList = moveToList;
 </script>
 
 </body>
