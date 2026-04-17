@@ -1,12 +1,12 @@
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA6hc8jjaOQadLsno-75eLSINQ9gPZ0fOU",
-  authDomain: "aniscroll-23cd8.firebaseapp.com",
-  projectId: "aniscroll-23cd8",
-  storageBucket: "aniscroll-23cd8.firebasestorage.app",
-  messagingSenderId: "442473446021",
-  appId: "1:442473446021:web:3d0ee6d7bca8ae689e87ec",
-  measurementId: "G-ZKTDDL1TG1"
+  apiKey: "AIzaSyA6MganRG6UW-Bydp78cOGS7owenEWksRE",
+  authDomain: "ani-scroll.firebaseapp.com",
+  projectId: "ani-scroll",
+  storageBucket: "ani-scroll.firebasestorage.app",
+  messagingSenderId: "229551996095",
+  appId: "1:229551996095:web:dc42aec18a65bcea841a0a",
+  measurementId: "G-RMXW8GR365"
 };
 
 export default firebaseConfig;
