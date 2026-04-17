@@ -70,7 +70,7 @@ color: #461220;
 
 .container {
 margin-top: 0;
-flex: 1;
+flex: 1; 
 width: 100%;
 padding: 30px;
 background: rgba(0,0,0,0.6);
@@ -378,7 +378,7 @@ align-items: center;
 .terms-card {
 width: 100%;
 max-width: 900px;
-margin: auto;
+margin: auto; 
 
 max-height: 75vh;
 overflow-y: auto;
@@ -590,8 +590,8 @@ No copying, modifying, or redistributing content.
 </div>
 
 
-</div>
-</div>
+        </div>
+    </div>
 </div>
 
 
@@ -655,16 +655,16 @@ provided in the website footer.
 </p>
 </div>
 
-</div>
+        </div>
 </div>
 
 </div>
 
 
 <div id="pagination" style="display:none; text-align:center; margin: 20px;">
-<button onclick="changePage(-1)">⬅ Previous</button>
-<span id="pageNumber" style="color:white; margin:0 10px;"></span>
-<button onclick="changePage(1)">Next ➡</button>
+    <button onclick="changePage(-1)">⬅ Previous</button>
+    <span id="pageNumber" style="color:white; margin:0 10px;"></span>
+    <button onclick="changePage(1)">Next ➡</button>
 </div>
 </div>
 
@@ -789,377 +789,387 @@ const authBtn = document.getElementById("authButton");
 
 
 /* ---------------- AUTH UI ---------------- */
+
 onAuthStateChanged(auth, (user) => {
 window.currentUser = user;
 
 
-if (user) {
-authBtn.textContent = "Logout";
-} else {
-authBtn.textContent = "Login";
+    if (user) {
+        authBtn.textContent = "Logout";
+    } else {
+        authBtn.textContent = "Login";
 }
 });
 
 
 authBtn.addEventListener("click", async () => {
-if (auth.currentUser) {
-await signOut(auth);
-alert("Logged out");
+    if (auth.currentUser) {
+    await signOut(auth);
+    alert("Logged out");
 } else {
-openAuthModal(); // authorization
+    openAuthModal(); // authorization
 }
 });
 
 
 async function login(email, password) {
-try {
-await signInWithEmailAndPassword(auth, email, password);
-alert("Logged in!");
-} catch (err) {
-alert(err.message);
-}
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Logged in!");
+    } catch (err) {
+        alert(err.message);
+    }
 }
 
 
 async function signup(email, password) {
-try {
-await createUserWithEmailAndPassword(auth, email, password);
-alert("Account created!");
-} catch (err) {
-alert(err.message);
-}
+    try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert("Account created!");
+    } catch (err) {
+        alert(err.message);
+    }
 }
 
 //log in form
 const loginForm = document.getElementById("loginForm");
 if (loginForm) {
-loginForm.addEventListener("submit", (e) => {
-e.preventDefault();
-login(
+    loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    login(
 document.getElementById("loginEmail").value,
 document.getElementById("loginPassword").value
 );
-});
+    });
 }
 
 
 document.getElementById("signupForm").addEventListener("submit", (e) => {
-e.preventDefault();
-signup(
-document.getElementById("signupEmail").value,
-document.getElementById("signupPassword").value
+    e.preventDefault();
+    signup(
+    document.getElementById("signupEmail").value,
+    document.getElementById("signupPassword").value
 );
 });
 
 
 //authorization
 function openAuthModal() {
-document.getElementById("loginModal").style.display = "flex";
+    document.getElementById("loginModal").style.display = "flex";
 }
 
 
 function closeAuthModal() {
-document.getElementById("loginModal").style.display = "none";
+    document.getElementById("loginModal").style.display = "none";
 }
 
 //login/signup
 function showSignup() {
-document.getElementById("loginFormBox").style.display = "none";
-document.getElementById("signupFormBox").style.display = "block";
+    document.getElementById("loginFormBox").style.display = "none";
+    document.getElementById("signupFormBox").style.display = "block";
 }
 
 function showLogin() {
-document.getElementById("loginFormBox").style.display = "block";
-document.getElementById("signupFormBox").style.display = "none";
+    document.getElementById("loginFormBox").style.display = "block";
+    document.getElementById("signupFormBox").style.display = "none";
 }
 
 /* ---------------- SEARCH ---------------- */
+
 document.getElementById("search").addEventListener("keypress", (e) => {
-if (e.key === "Enter") getAnime();
+    if (e.key === "Enter") getAnime();
 });
 
 /* ---------------- LOADER ---------------- */
+
 function showLoader() {
-document.getElementById("loader").style.display = "block";
-document.getElementById("results").innerHTML = "";
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("results").innerHTML = "";
 }
 
 
 function hideLoader() {
-document.getElementById("loader").style.display = "none";
+    document.getElementById("loader").style.display = "none";
 }
 
 /* ---------------- ANIME MODAL ---------------- */
+
 function openAnimeModal(id) {
-document.getElementById("animeModal").style.display = "flex";
-document.getElementById("animeModalContent").innerHTML =
-"<p style='color:white;text-align:center;'>Loading...</p>";
+    document.getElementById("animeModal").style.display = "flex";
+    document.getElementById("animeModalContent").innerHTML =
+        "<p style='color:white;text-align:center;'>Loading...</p>";
 
 fetch("https://graphql.anilist.co", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-query: `
-query ($id: Int) {
-Media(id: $id, type: ANIME) {
-title { romaji english }
-averageScore
-episodes
-status
-genres
-description(asHtml: false)
-coverImage { large }
-}
-}`,
-variables: { id }
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+    query: `
+    query ($id: Int) {
+        Media(id: $id, type: ANIME) {
+        title { romaji english }
+        averageScore
+        episodes
+        status
+        genres
+        description(asHtml: false)
+        coverImage { large }
+        }
+    }`,
+    variables: { id }
 
-})
+    })
 })
 .then(res => res.json())
 .then(data => {
-const a = data.data.Media;
-const desc = a.description
-? a.description.replace(/<[^>]+>/g, "").slice(0, 300) + "..."
-: "No description available.";
+    const a = data.data.Media;
+    const desc = a.description
+        ? a.description.replace(/<[^>]+>/g, "").slice(0, 300) + "..."
+        : "No description available.";
 
 
 
 document.getElementById("animeModalContent").innerHTML = `
-<img src="${a.coverImage.large}">
-<h3>${a.title.romaji}</h3>
-${a.title.english ? `<p>${a.title.english}</p>` : ""}
-<p>⭐ ${a.averageScore || "N/A"}</p>
-<p>📺 ${a.episodes || "N/A"}</p>
-<p>📌 ${a.status || "N/A"}</p>
-<p>🎭 ${a.genres?.join(", ") || "N/A"}</p>
-<p class="description">${desc}</p>
-`;
+    <img src="${a.coverImage.large}">
+    <h3>${a.title.romaji}</h3>
+    ${a.title.english ? `<p>${a.title.english}</p>` : ""}
+    <p>⭐ ${a.averageScore || "N/A"}</p>
+    <p>📺 ${a.episodes || "N/A"}</p>
+    <p>📌 ${a.status || "N/A"}</p>
+    <p>🎭 ${a.genres?.join(", ") || "N/A"}</p>
+    <p class="description">${desc}</p>
+    `;
 });
 
 }
 
 function closeAnimeModal() {
-document.getElementById("animeModal").style.display = "none";
+    document.getElementById("animeModal").style.display = "none";
 }
 
 
 /* ---------------- PAGE SYSTEM ---------------- */
+
 function switchPage(page) {
-currentPage = page;
+    currentPage = page;
 
 // elements
-const searchSection = document.getElementById("searchSection");
-const listTabs = document.getElementById("listTabs");
-const results = document.getElementById("results");
-const pagination = document.getElementById("pagination");
-const terms = document.getElementById("termsView");
-const privacy = document.getElementById("privacyView");
-const heading = document.getElementById("pageHeading");
+    const searchSection = document.getElementById("searchSection");
+    const listTabs = document.getElementById("listTabs");
+    const results = document.getElementById("results");
+    const pagination = document.getElementById("pagination");
+    const terms = document.getElementById("termsView");
+    const privacy = document.getElementById("privacyView");
+    const heading = document.getElementById("pageHeading");
 
 // RESET ALL
 
-searchSection.style.display = "none";
-listTabs.style.display = "none";
-results.style.display = "none";
-pagination.style.display = "none";
-terms.style.display = "none";
-privacy.style.display = "none";
-heading.style.display = "none";
+    searchSection.style.display = "none";
+    listTabs.style.display = "none";
+    results.style.display = "none";
+    pagination.style.display = "none";
+    terms.style.display = "none";
+    privacy.style.display = "none";
+    heading.style.display = "none";
 
 // PAGE ROUTING
-if (page === "search") {
-searchSection.style.display = "flex";
-results.style.display = "grid";
-heading.style.display = "none";
-render();
+
+    if (page === "search") {
+        searchSection.style.display = "flex";
+        results.style.display = "grid";
+        heading.style.display = "none";
+        render();
 }
 
-else if (page === "bookmarks") {
-heading.textContent = "My Bookmarks";
-heading.style.display = "block";
-results.style.display = "grid";
-render();
+    else if (page === "bookmarks") {
+        heading.textContent = "My Bookmarks";
+        heading.style.display = "block";
+        results.style.display = "grid";
+        render();
 }
 
-else if (page === "mylist") {
-heading.textContent = "My Lists";
-heading.style.display = "block";
-listTabs.style.display = "block";
-results.style.display = "grid";
+    else if (page === "mylist") {
+        heading.textContent = "My Lists";
+        heading.style.display = "block";
+        listTabs.style.display = "block";
+        results.style.display = "grid";
 
 currentTab = "watching";
 
 // force fresh load from storage
 setTimeout(() => {
-loadList();
+    loadList();
 }, 0);
 }
 
 
-else if (page === "terms") {
-heading.textContent = "Terms & Conditions";
-heading.style.display = "block";
-terms.style.display = "flex";
+    else if (page === "terms") {
+        heading.textContent = "Terms & Conditions";
+        heading.style.display = "block";
+        terms.style.display = "flex";
 }
 
-else if (page === "privacy") {
-heading.textContent = "Privacy Policy";
-heading.style.display = "block";
-privacy.style.display = "flex";
+    else if (page === "privacy") {
+        heading.textContent = "Privacy Policy";
+        heading.style.display = "block";
+        privacy.style.display = "flex";
 }
 
 // background swap
 
-document.body.classList.remove("home-bg", "other-bg");
-document.body.classList.add(page === "search" ? "home-bg" : "other-bg");
+    document.body.classList.remove("home-bg", "other-bg");
+    document.body.classList.add(page === "search" ? "home-bg" : "other-bg");
 }
 
 /* ---------------- RENDER ---------------- */
+
 function render() {
-if (currentPage === "search") getAllAnime();
-else if (currentPage === "bookmarks") loadBookmarks();
-else if (currentPage === "mylist") loadList();
+    if (currentPage === "search") getAllAnime();
+    else if (currentPage === "bookmarks") loadBookmarks();
+    else if (currentPage === "mylist") loadList();
 }
 
 /* ---------------- GENRES ---------------- */
+
 function populateGenreFilter() {
-const genres = [
-"Action","Romance","Comedy","Fantasy","Sci-Fi","Horror",
-"Slice of Life","Sports","Mystery","Thriller","Supernatural","Adventure"
+    const genres = [
+        "Action","Romance","Comedy","Fantasy","Sci-Fi","Horror",
+        "Slice of Life","Sports","Mystery","Thriller","Supernatural","Adventure"
 ];
 
 
-const filter = document.getElementById("genreFilter");
-filter.innerHTML = '<option value="">All Genres</option>';
+    const filter = document.getElementById("genreFilter");
+    filter.innerHTML = '<option value="">All Genres</option>';
 
-genres.forEach(g => {
-const opt = document.createElement("option");
-opt.value = g;
-opt.textContent = g;
-filter.appendChild(opt);
-});
+    genres.forEach(g => {
+        const opt = document.createElement("option");
+        opt.value = g;
+        opt.textContent = g;
+        filter.appendChild(opt);
+    });
 }
 
 document.getElementById("genreFilter").addEventListener("change", function () {
-const genre = this.value;
-if (genre) getAnimeByGenre(genre);
-else getAllAnime();
+    const genre = this.value;
+    if (genre) getAnimeByGenre(genre);
+    else getAllAnime();
 });
 
 
 /* ---------------- ANIME API ---------------- */
+
 function getAnime(reset = true) {
-const query = document.getElementById("search").value;
-if (!query) return;
+    const query = document.getElementById("search").value;
+    if (!query) return;
 
-lastQuery = query;
-currentMode = "search";
+    lastQuery = query;
+    currentMode = "search";
 
-if (reset) currentApiPage = 1;
+    if (reset) currentApiPage = 1;
 
-showLoader();
+    showLoader();
 
 fetch("https://graphql.anilist.co", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-query: `
-query ($search: String) {
-Page(page: ${currentApiPage}, perPage: 10) {
-media(search: $search, type: ANIME) {
-id
-title { romaji }
-averageScore
-coverImage { large }
-genres
-}
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+    query: `
+    query ($search: String) {
+    Page(page: ${currentApiPage}, perPage: 10) {
+    media(search: $search, type: ANIME) {
+    id
+    title { romaji }
+    averageScore
+    coverImage { large }
+    genres
+    }
 }
 
 }`,
 variables: { search: query }
-})
+        })
 })
 .then(res => res.json())
 .then(data => {
-hideLoader();
-displayAnime(data.data.Page.media);
-updatePagination();
-});
+    hideLoader();
+    displayAnime(data.data.Page.media);
+    updatePagination(); 
+    });
 }
 
 function getAllAnime() {
-currentMode = "all";
+    currentMode = "all";
 
-showLoader();
+    showLoader();
 
 fetch("https://graphql.anilist.co", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-query: `
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+    query: `
 {
-Page(page: ${currentApiPage}, perPage: 15) {
-media(type: ANIME, sort: SCORE_DESC) {
-id
-title { romaji }
-averageScore
-coverImage { large }
-genres
-}
-}
-}`
+    Page(page: ${currentApiPage}, perPage: 15) {
+    media(type: ANIME, sort: SCORE_DESC) {
+    id
+    title { romaji }
+    averageScore
+    coverImage { large }
+    genres
+            }
+        }
+    }`
 })
 })
 .then(res => res.json())
 .then(data => {
-hideLoader();
-displayAnime(data.data.Page.media);
-updatePagination(); // 🔥 ADD THIS
+    hideLoader();
+    displayAnime(data.data.Page.media);
+    updatePagination(); // 🔥 ADD THIS
 });
 }
 
-//genre
+//genre 
 function getAnimeByGenre(genre, reset = true ) {
-currentMode = "genre";
-lastGenre = genre;
-if (reset) currentApiPage = 1;
-showLoader();
+    currentMode = "genre";
+    lastGenre = genre;
+    if (reset) currentApiPage = 1;
+    showLoader();
 
 fetch("https://graphql.anilist.co", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-query: `
-query ($genre: String) {
-Page(page: ${currentApiPage}, perPage: 15) {
-media(type: ANIME, genre_in: [$genre], sort: SCORE_DESC) {
-id
-title { romaji }
-averageScore
-coverImage { large }
-genres
-}
-}
-}`,
-variables: { genre }
-})
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        query: `
+        query ($genre: String) {
+        Page(page: ${currentApiPage}, perPage: 15) {
+        media(type: ANIME, genre_in: [$genre], sort: SCORE_DESC) {
+        id
+        title { romaji }
+        averageScore
+        coverImage { large }
+        genres
+            }
+        }
+    }`,
+    variables: { genre }
+    })
 })
 .then(res => res.json())
 .then(data => {
-hideLoader();
-displayAnime(data.data.Page.media);
-updatePagination();
+    hideLoader();
+    displayAnime(data.data.Page.media);
+    updatePagination();
 });
 }
 
 
 /* ---------------- DISPLAY ---------------- */
-function displayAnime(list) {
-const container = document.getElementById("results");
 
-if (!list || list.length === 0) {
-container.innerHTML = "<p>No anime found.</p>";
-return;
+function displayAnime(list) {
+    const container = document.getElementById("results");
+
+        if (!list || list.length === 0) {
+        container.innerHTML = "<p>No anime found.</p>";
+        return;
 }
 
 container.innerHTML = "";
@@ -1167,50 +1177,53 @@ container.innerHTML = "";
 window.lastRenderedList = list;
 
 list.forEach(anime => {
-const div = document.createElement("div");
-div.className = "card";
+    const div = document.createElement("div");
+    div.className = "card";
 
 let extraButtons = "";
 
 
 // SEARCH PAGE
-if (currentPage === "search") {
-extraButtons = `
-<button onclick="bookmarkAnime(${anime.id})">Bookmark</button>
+
+    if (currentPage === "search") {
+    extraButtons = `
+        <button onclick="bookmarkAnime(${anime.id})">Bookmark</button>
 `;
 }
 
 
 // BOOKMARKS PAGE 
-else if (currentPage === "bookmarks") {
-extraButtons = `
-<button onclick="removeBookmark(${anime.id})">Remove</button>
+      
+        else if (currentPage === "bookmarks") {
+        extraButtons = `
+        <button onclick="removeBookmark(${anime.id})">Remove</button>
 
 
-<select onchange="moveToList(${anime.id}, this.value)">
-<option value="">Add to List</option>
-<option value="watching">Watching</option>
-<option value="to_watch">To Watch</option>
-<option value="completed">Completed</option>
-</select>
+    <select onchange="moveToList(${anime.id}, this.value)">
+        <option value="">Add to List</option>
+        <option value="watching">Watching</option>
+        <option value="to_watch">To Watch</option>
+        <option value="completed">Completed</option>
+    </select>
 `;
 }
 
 
 // MY LIST PAGE
-else if (currentPage === "mylist") {
-extraButtons = `
-<button onclick="removeFromList(${anime.id})">Remove</button>
+
+        else if (currentPage === "mylist") {
+            extraButtons = `
+        <button onclick="removeFromList(${anime.id})">Remove</button>
 `;
 }
 
 
-div.innerHTML = `
-<img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
-<h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
-<p>Score: ${anime.averageScore || "N/A"}</p>
-<p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
-${extraButtons}
+        div.innerHTML = `
+    <img src="${anime.coverImage?.large}" onclick="openAnimeModal(${anime.id})">
+    <h3 onclick="openAnimeModal(${anime.id})">${anime.title.romaji}</h3>
+    <p>Score: ${anime.averageScore || "N/A"}</p>
+    <p class="genres">${anime.genres ? anime.genres.slice(0,3).join(', ') : ''}</p>
+    ${extraButtons}
 `;
 
 container.appendChild(div);
@@ -1219,37 +1232,39 @@ container.appendChild(div);
 
 
 /* ---------------- BOOKMARKS ---------------- */
+
 function bookmarkAnime(id) {
-// IF NOT LOGGED IN
-if (!auth.currentUser) {
-alert("You must be logged in to bookmark anime!");
-openAuthModal();
-return;
-}
+    // IF NOT LOGGED IN
+    if (!auth.currentUser) {
+        alert("You must be logged in to bookmark anime!");
+        openAuthModal();
+        return;
+    }
 
-let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
 
-if (!bookmarks.some(a => a.id === id)) {
-const anime = window.lastRenderedList.find(a => a.id === id);
-if (!anime) return;
+    if (!bookmarks.some(a => a.id === id)) {
+        const anime = window.lastRenderedList.find(a => a.id === id);
+        if (!anime) return;
 
-bookmarks.push(anime);
-localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-alert("Bookmarked!");
-}
+        bookmarks.push(anime);
+        localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+        alert("Bookmarked!");
+    }
 }
 
 
 /* ---------------- LISTS ---------------- */
-async function loadBookmarks() {
-const container = document.getElementById("results");
-container.innerHTML = "";
 
-let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    async function loadBookmarks() {
+        const container = document.getElementById("results");
+        container.innerHTML = "";
 
-if (bookmarks.length === 0) {
-container.innerHTML = "<p>No bookmarks yet!</p>";
-return;
+    let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+
+    if (bookmarks.length === 0) {
+        container.innerHTML = "<p>No bookmarks yet!</p>";
+    return;
 }
 
 window.lastRenderedList = bookmarks;
@@ -1258,6 +1273,7 @@ displayAnime(bookmarks);
 
 
 // remove bookmarks
+
 function removeBookmark(id) {
 
 let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
@@ -1277,38 +1293,39 @@ loadBookmarks();
 
 //move to list
 function moveToList(id, listName) {
-if (!auth.currentUser) {
-alert("You must be logged in first!");
-openAuthModal();
-return;
-}
+    if (!auth.currentUser) {
+        alert("You must be logged in first!");
+        openAuthModal();
+        return;
+    }
 
-if (!listName) return;
+    if (!listName) return;
 
-["watching", "to_watch", "completed"].forEach(key => {
-let list = JSON.parse(localStorage.getItem(key)) || [];
-list = list.filter(a => a.id !== id);
-localStorage.setItem(key, JSON.stringify(list));
-});
+    ["watching", "to_watch", "completed"].forEach(key => {
+        let list = JSON.parse(localStorage.getItem(key)) || [];
+        list = list.filter(a => a.id !== id);
+        localStorage.setItem(key, JSON.stringify(list));
+    });
 
-let newList = JSON.parse(localStorage.getItem(listName)) || [];
-if (!newList.some(a => a.id === id)) {
-newList.push({ id });
-localStorage.setItem(listName, JSON.stringify(newList));
-alert("Added to " + listName + "!");
-}
+    let newList = JSON.parse(localStorage.getItem(listName)) || [];
+    if (!newList.some(a => a.id === id)) {
+        newList.push({ id });
+        localStorage.setItem(listName, JSON.stringify(newList));
+        alert("Added to " + listName + "!");
+    }
 
-loadBookmarks();
+    loadBookmarks();
 }
 
 //list
+
 async function loadList() {
-const container = document.getElementById("results");
-container.innerHTML = "";
+    const container = document.getElementById("results");
+    container.innerHTML = "";
 
 
 document.querySelectorAll("#listTabs button")
-.forEach(btn => btn.classList.remove("active-tab"));
+    .forEach(btn => btn.classList.remove("active-tab"));
 
 
 const activeBtn = document.getElementById("tab-" + currentTab);
@@ -1319,111 +1336,114 @@ const saved = JSON.parse(localStorage.getItem(currentTab)) || [];
 
 
 if (saved.length === 0) {
-container.innerHTML = `<p>No anime in ${currentTab.replace("_", " ")} yet!</p>`;
-return;
+    container.innerHTML = `<p>No anime in ${currentTab.replace("_", " ")} yet!</p>`;
+    return;
 }
 
 const ids = saved.map(a => a.id);
 
 const res = await fetch("https://graphql.anilist.co", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-query: `
-query ($ids: [Int]) {
-Page(page: 1, perPage: 50) {
-media(id_in: $ids, type: ANIME) {
-id
-title { romaji }
-averageScore
-coverImage { large }
-genres
-}
-}
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+    query: `
+    query ($ids: [Int]) {
+    Page(page: 1, perPage: 50) {
+    media(id_in: $ids, type: ANIME) {
+    id
+    title { romaji }
+    averageScore
+    coverImage { large }
+    genres
+        }
+    }
 }`,
 variables: { ids }
-})
+    })
 });
 
 
-const data = await res.json();
-displayAnime(data.data.Page.media);
+    const data = await res.json();
+    displayAnime(data.data.Page.media);
 }
 
 
 //switchtab
+
 function switchTab(tab) {
-currentTab = tab.trim(); // IMPORTANT FIX
-loadList();
+    currentTab = tab.trim(); // IMPORTANT FIX
+    loadList();
 }
 
 
 // remove list
 function removeFromList(id) {
-const key = currentTab;
+    const key = currentTab;
 
-let list = JSON.parse(localStorage.getItem(key)) || [];
+    let list = JSON.parse(localStorage.getItem(key)) || [];
 
-list = list.filter(a => a.id !== id);
+    list = list.filter(a => a.id !== id);
 
-localStorage.setItem(key, JSON.stringify(list));
+    localStorage.setItem(key, JSON.stringify(list));
 
-loadList();
+    loadList();
 }
 
 
 // pagination
+
 function updatePagination() {
-const pagination = document.getElementById("pagination");
+    const pagination = document.getElementById("pagination");
 
 // Hide for non-search pages
 if (currentPage !== "search") {
-pagination.style.display = "none";
-return;
+    pagination.style.display = "none";
+    return;
 }
 
-// Hide for genre
+// Hide for genre 
 if (currentMode === "genre") {
-pagination.style.display = "none";
-return;
+    pagination.style.display = "none";
+    return;
 }
 
-pagination.style.display = "flex";
-document.getElementById("pageNumber").textContent = "Page " + currentApiPage;
+    pagination.style.display = "flex";
+    document.getElementById("pageNumber").textContent = "Page " + currentApiPage;
 
 }
 
-//changepage
+//changepage 
 function changePage(direction) {
-currentApiPage += direction;
-if (currentApiPage < 1) currentApiPage = 1;
+    currentApiPage += direction;
+    if (currentApiPage < 1) currentApiPage = 1;
 
-showLoader();
+    showLoader();
 
-if (currentMode === "search") {
-getAnime(false);
-}
-else if (currentMode === "genre") {
-getAnimeByGenre(lastGenre, false);
-}
-else {
-getAllAnime();
-}
+    if (currentMode === "search") {
+        getAnime(false);
+    }
+    else if (currentMode === "genre") {
+        getAnimeByGenre(lastGenre, false);
+    }
+    else {
+        getAllAnime();
+    }
 
-window.scrollTo({
-top: 0,
-behavior: "smooth"
-});
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 
 /* ---------------- INIT ---------------- */
 window.onload = function () {
-populateGenreFilter();
-switchPage("search");
+    populateGenreFilter();
+    switchPage("search");
 };
 
 /* expose functions */
+
 window.switchPage = switchPage;
 window.openAnimeModal = openAnimeModal;
 window.closeAnimeModal = closeAnimeModal;
