@@ -12,7 +12,7 @@ Group Roles: UI Design- Anora Martin
              Lead- Angel Prince
              DevOPs- Ashely Lewis
 
-  Hosting URL: https://aniscroll-23cd8.web.app/
+  Hosting URL: https://ani-scroll.web.app/
 
   Credentials
   email bob@mail.com
