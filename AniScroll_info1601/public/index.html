@@ -805,11 +805,21 @@ window.currentUser = user;
 
 authBtn.addEventListener("click", async () => {
     if (auth.currentUser) {
-    await signOut(auth);
-    alert("Logged out");
-} else {
-    openAuthModal(); // authorization
-}
+        await signOut(auth);
+
+        // clear data
+        localStorage.removeItem("bookmarks");
+        localStorage.removeItem("watching");
+        localStorage.removeItem("to_watch");
+        localStorage.removeItem("completed");
+
+        switchPage("search");   // go back to home
+        getAllAnime();          // fetch anime again
+
+        alert("Logged out");
+    } else {
+        openAuthModal();
+    }
 });
 
 
