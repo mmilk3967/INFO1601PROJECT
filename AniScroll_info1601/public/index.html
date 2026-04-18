@@ -1186,10 +1186,18 @@ let extraButtons = "";
 
 // SEARCH PAGE
 
-    if (currentPage === "search") {
+ if (currentPage === "search") {
+
+    const bookmarked = isBookmarked(anime.id);
+
     extraButtons = `
-        <button onclick="bookmarkAnime(${anime.id})">Bookmark</button>
-`;
+        <button 
+            onclick="bookmarkAnime(${anime.id})"
+            ${bookmarked ? "disabled" : ""}
+        >
+            ${bookmarked ? "Bookmarked ✓" : "Bookmark"}
+        </button>
+    `;
 }
 
 
@@ -1251,10 +1259,16 @@ function bookmarkAnime(id) {
         bookmarks.push(anime);
         localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
         alert("Bookmarked!");
+        render(); 
     }
 }
 
-
+//bookmarked
+    function isBookmarked(id) {
+    let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    return bookmarks.some(a => a.id === id);
+}    
+        
 /* ---------------- LISTS ---------------- */
 
     async function loadBookmarks() {
