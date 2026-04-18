@@ -1259,7 +1259,7 @@ function bookmarkAnime(id) {
         bookmarks.push(anime);
         localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
         alert("Bookmarked!");
-        render(); 
+        displayAnime(window.lastRenderedList);
     }
 }
 
