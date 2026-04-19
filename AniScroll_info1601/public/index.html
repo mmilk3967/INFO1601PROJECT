@@ -709,7 +709,7 @@ provided in the website footer.
 
 
 <footer>
-<p>&copy; 2024 AniScroll. All rights reserved. | <a href="#" onclick="switchPage('terms')" style="color:#FED0DB;">Terms</a> | <a href="#" onclick="switchPage('privacy')" style="color:#FED0DB;">Privacy</a></p>
+<p>&copy; 2026 AniScroll. All rights reserved. | <a href="#" onclick="switchPage('terms')" style="color:#FED0DB;">Terms</a> | <a href="#" onclick="switchPage('privacy')" style="color:#FED0DB;">Privacy</a></p>
 <p> Your Anime Update </p>
 
 <br></br>
@@ -960,7 +960,7 @@ function closeAnimeModal() {
 
 /* ---------------- PAGE SYSTEM ---------------- */
 
-function switchPage(page) {
+function switchPage(page, skipRender = false) {
     currentPage = page;
 
 // elements
@@ -988,7 +988,7 @@ function switchPage(page) {
         searchSection.style.display = "flex";
         results.style.display = "grid";
         heading.style.display = "none";
-        render();
+        if (!skipRender) render();
 }
 
     else if (page === "bookmarks") {
@@ -1058,9 +1058,14 @@ function populateGenreFilter() {
         filter.appendChild(opt);
     });
 }
-
+// genre id
 document.getElementById("genreFilter").addEventListener("change", function () {
     const genre = this.value;
+
+    currentApiPage = 1;
+
+    switchPage("search", true);
+
     if (genre) getAnimeByGenre(genre);
     else getAllAnime();
 });
@@ -1422,12 +1427,6 @@ function updatePagination() {
 
 // Hide for non-search pages
 if (currentPage !== "search") {
-    pagination.style.display = "none";
-    return;
-}
-
-// Hide for genre 
-if (currentMode === "genre") {
     pagination.style.display = "none";
     return;
 }
