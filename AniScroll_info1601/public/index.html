@@ -723,7 +723,7 @@ provided in the website footer.
 <p class="footer-desc"> AniScroll is your designated anime tracker and bookmarker.
 Designed to cater to your anime needs. We at Aniscroll are a team of anime lovers
 that created this website based on our own frustration with not being able to
-conveniently keep track of anime. Feel free to contact us if any problems arrise
+conveniently keep track of anime. Feel free to contact us if any problems arise
 while in use of this website. </p>
 </div>
 
@@ -984,11 +984,11 @@ function switchPage(page, skipRender = false) {
 
 // PAGE ROUTING
 
-    if (page === "search") {
-        searchSection.style.display = "flex";
-        results.style.display = "grid";
-        heading.style.display = "none";
-        if (!skipRender) render();
+   if (page === "search") {
+    searchSection.style.display = "flex";
+    results.style.display = "grid";
+    heading.style.display = "none";
+     if (!skipRender) render();
 }
 
     else if (page === "bookmarks") {
@@ -1058,7 +1058,7 @@ function populateGenreFilter() {
         filter.appendChild(opt);
     });
 }
-// genre id
+// here
 document.getElementById("genreFilter").addEventListener("change", function () {
     const genre = this.value;
 
@@ -1139,7 +1139,7 @@ fetch("https://graphql.anilist.co", {
 .then(data => {
     hideLoader();
     displayAnime(data.data.Page.media);
-    updatePagination(); // 🔥 ADD THIS
+    updatePagination(); 
 });
 }
 
